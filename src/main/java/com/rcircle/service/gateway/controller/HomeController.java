@@ -2,6 +2,7 @@ package com.rcircle.service.gateway.controller;
 
 import com.rcircle.service.gateway.model.Account;
 import com.rcircle.service.gateway.model.LogFile;
+import com.rcircle.service.gateway.model.Message;
 import com.rcircle.service.gateway.services.*;
 import com.rcircle.service.gateway.utils.Base64;
 import com.rcircle.service.gateway.utils.MvcToolkit;
@@ -31,6 +32,17 @@ public class HomeController {
     @Resource
     private MessageService messageService;
 
+    @GetMapping("notifications")
+    public String showNotification(Principal principal, ModelMap mm){
+        MvcToolkit.autoLoadTopMenuData(resourceService, mm);
+        MvcToolkit.autoLoadSideBarData(resourceService, mm);
+        MvcToolkit.autoLoadNewsData(messageService, mm);
+        mm.addAttribute("title", "Notifications");
+        mm.addAttribute("messages", messageService.getMessageList(Message.TYPE_SMS));
+        mm.addAttribute("news", messageService.getMessageList(Message.TYPE_NEWS));
+        mm.addAttribute("system", messageService.getMessageList(Message.TYPE_SYS));
+        return "notification";
+    }
 
     @GetMapping(value = {"", "home"})
     public String showHomePage(Principal principal, ModelMap mm) {
@@ -39,7 +51,7 @@ public class HomeController {
         MvcToolkit.autoLoadNewsData(messageService, mm);
         List<LogFile> logs = new ArrayList<>();
         resourceService.getAllBlogs(0, 0, null, 0, 0, 5, logs);
-        mm.addAttribute("title", "- Simple Life -");
+        mm.addAttribute("title", "- Simple & Living -");
         mm.addAttribute("logs", logs);
         return "index";
     }

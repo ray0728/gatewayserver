@@ -174,5 +174,8 @@ public class Toolkit {
         return clzss.equals(Integer.class);
     }
 
-
+    public static long getCurrentTimeInMillis(){
+        Calendar cal = Calendar.getInstance();
+        return cal.getTimeInMillis();
+    }
 }

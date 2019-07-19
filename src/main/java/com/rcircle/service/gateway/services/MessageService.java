@@ -1,12 +1,13 @@
 package com.rcircle.service.gateway.services;
 
 import com.alibaba.fastjson.JSON;
+import com.rcircle.service.gateway.events.sink.FeedBackSink;
 import com.rcircle.service.gateway.events.sink.HLSSink;
 import com.rcircle.service.gateway.events.sink.NewsSink;
 import com.rcircle.service.gateway.events.sink.SmsSink;
 import com.rcircle.service.gateway.model.HLSMap;
-import com.rcircle.service.gateway.model.News;
-import com.rcircle.service.gateway.model.Sms;
+import com.rcircle.service.gateway.model.Message;
+import com.rcircle.service.gateway.utils.Toolkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -20,23 +21,27 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
-@EnableBinding(value = {NewsSink.class, SmsSink.class, HLSSink.class})
+@EnableBinding(value = {NewsSink.class, SmsSink.class, HLSSink.class, FeedBackSink.class})
 public class MessageService {
     public int RESULT_FAILED = 0;
     public int RESULT_SUCCESS = 1;
     public int RESULT_UNKNOWN = 2;
     private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
-    private List<News> newsList = new ArrayList<>();
-    private List<Sms> smsList = new ArrayList<>();
+    private List<Message> newsList = new ArrayList<>();
+    private List<Message> smsList = new ArrayList<>();
+    private List<Message> sysList = new ArrayList<>();
     private List<HLSMap> hlsList = new ArrayList<>();
     private Lock newsListLock = new ReentrantLock();
     private Lock smsListLock = new ReentrantLock();
     private Lock hlsListLock = new ReentrantLock();
+    private Lock sysListLock = new ReentrantLock();
 
     @StreamListener(NewsSink.TOPIC)
     public void receiveNews(String string) {
-        News news = JSON.parseObject(string, News.class);
-        logger.info("Title:{}, author:{}, url:{}, date:{}", news.getTitle(), news.getAuthor(), news.getUrl(), news.getDate());
+        Message news = JSON.parseObject(string, Message.class);
+        news.setType(Message.TYPE_NEWS);
+        news.setId(Toolkit.getCurrentTimeInMillis());
+        logger.info("Title:{}, author:{}, url:{}, date:{}", news.getTitle(), news.getSender(), news.getContent(), news.getDate());
         newsListLock.lock();
         newsList.add(news);
         newsListLock.unlock();
@@ -44,20 +49,32 @@ public class MessageService {
 
     @StreamListener(SmsSink.TOPIC)
     public void receiveSms(String str) {
-        Sms sms = JSON.parseObject(str, Sms.class);
-        logger.info("SEND_UID:{}, RECEIVE_UID:{}, MESSAGE:{}, DATE:{}", sms.getSender_name(), sms.getReceiver_uid(), sms.getMessage(), sms.getDate());
+        Message sms = JSON.parseObject(str, Message.class);
+        sms.setType(Message.TYPE_SMS);
+        sms.setId(Toolkit.getCurrentTimeInMillis());
+        logger.info("SEND_UID:{}, RECEIVE_UID:{}, MESSAGE:{}, DATE:{}", sms.getSender(), sms.getReceiver_uid(), sms.getContent(), sms.getDate());
         smsListLock.lock();
         smsList.add(sms);
         smsListLock.unlock();
     }
 
     @StreamListener(HLSSink.TOPIC)
-    public void reveiveHLS(String str) {
+    public void receiveHLS(String str) {
         HLSMap map = JSON.parseObject(str, HLSMap.class);
         logger.info("LOG_ID:{}, FILE_NAME:{}, RESULT:{}", map.getId(), map.getName(), map.isSuccess());
         hlsListLock.lock();
         hlsList.add(map);
         hlsListLock.unlock();
+    }
+
+    @StreamListener(FeedBackSink.TOPIC)
+    public void receiveFeedBack(String str) {
+        Message feedback = JSON.parseObject(str, Message.class);
+        feedback.setType(Message.TYPE_SYS);
+        feedback.setId(Toolkit.getCurrentTimeInMillis());
+        sysListLock.lock();
+        sysList.add(feedback);
+        sysListLock.unlock();
     }
 
     public int checkHLSResult(int logid, String filename) {
@@ -75,36 +92,50 @@ public class MessageService {
         return ret;
     }
 
-    public void clearAllHLSResultFor(int logid){
+    public void clearAllHLSResultFor(int logid) {
         int ret = RESULT_UNKNOWN;
         hlsListLock.lock();
         Iterator<HLSMap> iter = hlsList.iterator();
         while (iter.hasNext()) {
             HLSMap map = iter.next();
-            if(map.getId() == logid){
+            if (map.getId() == logid) {
                 hlsList.remove(map);
             }
         }
         hlsListLock.unlock();
     }
 
-    public List<News> getNewsList() {
-        List<News> currentList = cloneList(newsList, newsListLock);
+    private List<Message> getNewsList() {
+        List<Message> currentList = cloneList(newsList, newsListLock);
         if (currentList.isEmpty() || currentList.size() < 2) {
-            News defaultNews = new News();
-            defaultNews.setTitle("Welcome to Simple Life");
-            defaultNews.setUrl("#");
+            Message defaultNews = new Message();
+            defaultNews.setTitle("Welcome to Simple & Living");
+            defaultNews.setContent("#");
             currentList.add(defaultNews);
-            defaultNews = new News();
+            defaultNews = new Message();
             defaultNews.setTitle("You can post your opinion");
-            defaultNews.setUrl("#");
+            defaultNews.setContent("#");
             currentList.add(defaultNews);
         }
         return currentList;
     }
 
-    public List<Sms> getSmsList() {
-        return cloneList(smsList, smsListLock);
+    public List<Message> getMessageList(int type) {
+        List<Message> list = null;
+        switch (type) {
+            case Message.TYPE_NEWS:
+            case Message.TYPE_NEWS_IMP:
+                list = getNewsList();
+                break;
+            case Message.TYPE_SMS:
+                list = cloneList(smsList, smsListLock);
+                break;
+            case Message.TYPE_SYS:
+            case Message.TYPE_SYS_IMP:
+                list = cloneList(sysList, sysListLock);
+                break;
+        }
+        return list;
     }
 
     private <T> List<T> cloneList(List<T> list, Lock lock) {

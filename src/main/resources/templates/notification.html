@@ -16,34 +16,68 @@
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#notification">Notifications</a>
+            <a class="nav-link active" data-toggle="tab" href="#message"><span class="fa fa-envelope"></span>Message</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#news"><span class="fa fa-newspaper-o"></span>News</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#system"><span class="fa fa-bell"></span>System</a>
         </li>
     </ul>
     <div class="tab-content">
-        <div id="notification" class="container tab-pane active">
-            <div class="card" th:each="msg:${messages}" th:switch="${msg.type}">
-                <div class="card-header" th:case="'sms'">
+        <div id="message" class="container tab-pane active">
+            <div class="card" th:each="msg:${messages}">
+                <div class="card-header">
                     <a class="d-flex card-link text-black" data-toggle="collapse" th:href="${'#m' + msg.id}">
+                        <span class="flex-grow-1 messagetitle" th:text="${msg.content}"></span>
+                        <span th:text="${msg.sender}"></span>
+                        <span th:text="${msg.date}"></span>
+                    </a>
+                </div>
+                <div th:id="${'m' + msg.id}" class="collapse">
+                    <div class="card-body" th:utext="${msg.content}"></div>
+                </div>
+            </div>
+        </div>
+        <div id="news" class="container tab-pane active">
+            <div class="card" th:each="msg:${news}" th:switch="${msg.type}">
+                <div class="card-header" th:case="${msg.TYPE_NEWS}">
+                    <a class="d-flex card-link text-black" data-toggle="collapse" th:href="${'#n' + msg.id}">
+                        <span class="flex-grow-1 messagetitle" th:text="${msg.title}"></span>
+                        <span th:text="${msg.sender}"></span>
+                        <span th:text="${msg.date}"></span>
+                    </a>
+                </div>
+                <div class="card-header bg-info" th:case="${msg.TYPE_NEWS_IMP}">
+                    <a class="d-flex card-link text-white" data-toggle="collapse" th:href="${'#n' + msg.id}">
+                        <span class="flex-grow-1 messagetitle" th:text="${msg.title}"></span>
+                        <span th:text="${msg.sender}"></span>
+                        <span th:text="${msg.date}"></span>
+                    </a>
+                </div>
+                <div th:id="${'n' + msg.id}" class="collapse">
+                    <div class="card-body" th:utext="${msg.content}"></div>
+                </div>
+            </div>
+        </div>
+        <div id="system" class="container tab-pane active">
+            <div class="card" th:each="msg:${system}" th:switch="${msg.type}">
+                <div class="card-header" th:case="${msg.TYPE_SYS}">
+                    <a class="d-flex card-link text-black" data-toggle="collapse" th:href="${'#s' + msg.id}">
                         <span class="flex-grow-1" th:text="${msg.title}"></span>
                         <span th:text="${msg.sender}"></span>
                         <span th:text="${msg.date}"></span>
                     </a>
                 </div>
-                <div class="card-header bg-info" th:case="'sys'">
-                    <a class="d-flex card-link text-white" data-toggle="collapse" th:href="${'#m' + msg.id}">
+                <div class="card-header bg-info" th:case="${msg.TYPE_SYS_IMP}">
+                    <a class="d-flex card-link text-white" data-toggle="collapse" th:href="${'#s' + msg.id}">
                         <span class="flex-grow-1" th:text="${msg.title}"></span>
                         <span th:text="${msg.sender}"></span>
                         <span th:text="${msg.date}"></span>
                     </a>
                 </div>
-                <div class="card-header bg-danger" th:case="'imp'">
-                    <a class="d-flex card-link text-white" data-toggle="collapse" th:href="${'#m' + msg.id}">
-                        <span class="flex-grow-1" th:text="${msg.title}"></span>
-                        <span th:text="${msg.sender}"></span>
-                        <span th:text="${msg.date}"></span>
-                    </a>
-                </div>
-                <div th:id="${'#m' + msg.id}" class="collapse">
+                <div th:id="${'s' + msg.id}" class="collapse">
                     <div class="card-body" th:utext="${msg.content}"></div>
                 </div>
             </div>

@@ -90,7 +90,7 @@ public class BlogController {
     public String showLog(Principal principal, @RequestParam(name = "id") int lid, ModelMap mm) {
         LogFile log = resourceService.getBlog(lid, false);
         if (log == null) {
-            return "redirect:/error?type=404";
+            return "redirect:/error/404";
         } else {
             MvcToolkit.autoLoadTopMenuData(resourceService, mm);
             MvcToolkit.autoLoadSideBarData(resourceService, mm);

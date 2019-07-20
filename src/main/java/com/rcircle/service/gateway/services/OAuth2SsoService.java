@@ -28,8 +28,8 @@ public class OAuth2SsoService {
     @Autowired
     private RemoteSsoClient remoteSsoClient;
 
-    @HystrixCommand(fallbackMethod = "buildFallbackGetToken", threadPoolKey = "AccessTokenThreadPool")
-    private String getAuthorizeCode(Map parameters, String state){
+    @HystrixCommand(fallbackMethod = "buildFallbackGetCode", threadPoolKey = "AccessTokenThreadPool")
+    public String getAuthorizeCode(Map parameters, String state){
         parameters.put("response_type", "code");
         parameters.put("client_id", clientid);
         parameters.put("redirect_uri", extractRedirect("/rst/redirect"));
@@ -38,7 +38,7 @@ public class OAuth2SsoService {
     }
 
     @HystrixCommand(fallbackMethod = "buildFallbackGetToken", threadPoolKey = "AccessTokenThreadPool")
-    private String getToken(Map<String, String>parameters, String code){
+    public String getToken(Map<String, String>parameters, String code){
         parameters.remove("response");
         parameters.put("client_secret", secret);
         parameters.put("grant_type", "authorization_code");
@@ -62,7 +62,15 @@ public class OAuth2SsoService {
         return getToken(parameters, authcode.get("code"));
     }
 
-    public String buildFallbackGetToken(Map parameter, String obj, Throwable throwable) {
+    public String buildFallbackGetCode(Map parameter, String obj, Throwable throwable) {
+        return autoDetectException(throwable);
+    }
+
+    public String buildFallbackGetToken(Map<String, String> parameter, String obj, Throwable throwable) {
+     return autoDetectException(throwable);
+    }
+
+    private String autoDetectException(Throwable throwable){
         int status = 0;
         String reason = null;
         if (throwable instanceof FeignException) {

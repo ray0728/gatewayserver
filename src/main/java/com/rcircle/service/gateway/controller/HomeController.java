@@ -1,11 +1,11 @@
 package com.rcircle.service.gateway.controller;
 
-import com.rcircle.service.gateway.model.Account;
 import com.rcircle.service.gateway.model.LogFile;
 import com.rcircle.service.gateway.model.Message;
 import com.rcircle.service.gateway.services.*;
 import com.rcircle.service.gateway.utils.Base64;
 import com.rcircle.service.gateway.utils.MvcToolkit;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -33,7 +33,7 @@ public class HomeController {
     private MessageService messageService;
 
     @GetMapping("notifications")
-    public String showNotification(Principal principal, ModelMap mm){
+    public String showNotification(Principal principal, ModelMap mm) {
         MvcToolkit.autoLoadTopMenuData(resourceService, mm);
         MvcToolkit.autoLoadSideBarData(resourceService, mm);
         MvcToolkit.autoLoadNewsData(messageService, mm);
@@ -105,5 +105,16 @@ public class HomeController {
         MvcToolkit.autoLoadNewsData(messageService, mm);
         mm.addAttribute("title", "Contact us");
         return "contact";
+    }
+
+    @GetMapping("error/{num}")
+    public String showError(ModelMap mm, @PathVariable("num") int num) {
+        MvcToolkit.autoLoadTopMenuData(resourceService, mm);
+        MvcToolkit.autoLoadSideBarData(resourceService, mm);
+        MvcToolkit.autoLoadNewsData(messageService, mm);
+        mm.addAttribute("errnum", num);
+        mm.addAttribute("title", "Contact us");
+        mm.addAttribute("errdesc", HttpStatus.resolve(num).getReasonPhrase());
+        return "error";
     }
 }

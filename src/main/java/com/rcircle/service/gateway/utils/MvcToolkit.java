@@ -1,5 +1,6 @@
 package com.rcircle.service.gateway.utils;
 
+import com.rcircle.service.gateway.model.Message;
 import com.rcircle.service.gateway.services.MessageService;
 import com.rcircle.service.gateway.services.ResourceService;
 import org.springframework.ui.ModelMap;
@@ -17,7 +18,7 @@ public class MvcToolkit {
     }
 
     public static ModelMap autoLoadNewsData(MessageService messageService, ModelMap mm){
-        mm.addAttribute("newslist", messageService.getNewsList());
+        mm.addAttribute("newslist", messageService.getMessageList(Message.TYPE_NEWS));
         return mm;
     }
 }

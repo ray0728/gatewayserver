@@ -46,22 +46,6 @@ public class OAuth2SsoService {
         return remoteSsoClient.getAccessToken(parameters);
     }
 
-    public String getAccessToken(String username, String password) {
-        String state = Toolkit.randomString(8);
-        HttpContextHolder.getContext().setValue(RemoteSsoRequestInterceptor.USERNAMEANDPASSWORD, username + ":" + password);
-        Map<String, String> parameters = new HashMap<>();
-        String map = getAuthorizeCode(parameters, state);
-        if(map.startsWith("failed")){
-            return map;
-        }
-        HashMap<String, String> authcode = JSON.parseObject(map, HashMap.class);
-        if (!state.equals(authcode.get("state"))) {
-            return "failed! state mismatch";
-        }
-        HttpContextHolder.getContext().delete(RemoteSsoRequestInterceptor.USERNAMEANDPASSWORD);
-        return getToken(parameters, authcode.get("code"));
-    }
-
     public String buildFallbackGetCode(Map parameter, String obj, Throwable throwable) {
         return autoDetectException(throwable);
     }

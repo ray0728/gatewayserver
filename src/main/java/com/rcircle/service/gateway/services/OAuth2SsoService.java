@@ -21,12 +21,20 @@ public class OAuth2SsoService {
     private String clientid;
     @Value("${security.oauth2.client.client-secret}")
     private String secret;
-
     @Value("${server.port}")
     private int port;
+    @Value("${trust.config.id}")
+    private String trustConfigId;
+    @Value("${trust.config.secret}")
+    private String trustConfigSecret;
 
     @Autowired
     private RemoteSsoClient remoteSsoClient;
+
+    @HystrixCommand(fallbackMethod = "buildFallbackGetTrustToken", threadPoolKey = "AccessTokenThreadPool")
+    public String getTrustToken(){
+        return remoteSsoClient.getTrustToken(trustConfigId, trustConfigSecret);
+    }
 
     @HystrixCommand(fallbackMethod = "buildFallbackGetCode", threadPoolKey = "AccessTokenThreadPool")
     public String getAuthorizeCode(Map parameters, String state){
@@ -52,6 +60,10 @@ public class OAuth2SsoService {
 
     public String buildFallbackGetToken(Map<String, String> parameter, String obj, Throwable throwable) {
      return autoDetectException(throwable);
+    }
+
+    public String buildFallbackGetTrustToken(Throwable throwable){
+        return autoDetectException(throwable);
     }
 
     private String autoDetectException(Throwable throwable){

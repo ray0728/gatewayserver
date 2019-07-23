@@ -23,4 +23,11 @@ public interface RemoteSsoClient {
     @RequestMapping({"/oauth/check_token"})
     @ResponseBody
     public String checkToken(@RequestParam("token") String value);
+
+    @RequestMapping(
+            value = {"/trust/token"},
+            method = {RequestMethod.GET}
+    )
+    public String getTrustToken(@RequestParam(name = "id") String id,
+                                @RequestParam(name = "secret") String secret);
 }

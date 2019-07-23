@@ -47,6 +47,12 @@ public class OAuthFeignAuthenticationProvider implements AuthenticationProvider 
     }
 
     private String getAccessToken(String username, String password) {
+        String info = oAuth2SsoService.getTrustToken();
+        if(info.startsWith("failed")){
+            return info;
+        }
+        String[] emt = info.split(":");
+        HttpContextHolder.getContext().setValue(emt[0], emt[1]);
         String state = Toolkit.randomString(8);
         HttpContextHolder.getContext().setValue(RemoteSsoRequestInterceptor.USERNAMEANDPASSWORD, username + ":" + password);
         Map<String, String> parameters = new HashMap<>();

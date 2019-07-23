@@ -108,6 +108,6 @@ public class RestPageController {
             default:
                 break;
         }
-        return "";
+        return ret;
     }
 }

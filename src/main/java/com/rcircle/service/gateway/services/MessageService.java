@@ -122,10 +122,11 @@ public class MessageService {
 
     public List<Message> getMessageList(int type) {
         List<Message> list = null;
+        Message message = null;
         switch (type) {
             case Message.TYPE_NEWS:
             case Message.TYPE_NEWS_IMP:
-                list = getNewsList();
+                list = cloneList(newsList, newsListLock);
                 break;
             case Message.TYPE_SMS:
                 list = cloneList(smsList, smsListLock);

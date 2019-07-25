@@ -16,13 +16,13 @@
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#message"><span class="fa fa-envelope"></span>Message</a>
+            <a class="nav-link active" data-toggle="tab" href="#message"><span class="fa fa-envelope"></span> Message</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#news"><span class="fa fa-newspaper-o"></span>News</a>
+            <a class="nav-link" data-toggle="tab" href="#news"><span class="fa fa-newspaper-o"></span> News</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#system"><span class="fa fa-bell"></span>System</a>
+            <a class="nav-link" data-toggle="tab" href="#system"><span class="fa fa-bell"></span> System</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -39,8 +39,12 @@
                     <div class="card-body" th:utext="${msg.content}"></div>
                 </div>
             </div>
+            <div class="jumbotron" th:if="${messages.isEmpty()}">
+                <br>
+                <p>No new Message.</p>
+            </div>
         </div>
-        <div id="news" class="container tab-pane active">
+        <div id="news" class="container tab-pane fade">
             <div class="card" th:each="msg:${news}" th:switch="${msg.type}">
                 <div class="card-header" th:case="${msg.TYPE_NEWS}">
                     <a class="d-flex card-link text-black" data-toggle="collapse" th:href="${'#n' + msg.id}">
@@ -60,8 +64,12 @@
                     <div class="card-body" th:utext="${msg.content}"></div>
                 </div>
             </div>
+            <div class="jumbotron" th:if="${news.isEmpty()}">
+                <br>
+                <p>No new News.</p>
+            </div>
         </div>
-        <div id="system" class="container tab-pane active">
+        <div id="system" class="container tab-pane fade">
             <div class="card" th:each="msg:${system}" th:switch="${msg.type}">
                 <div class="card-header" th:case="${msg.TYPE_SYS}">
                     <a class="d-flex card-link text-black" data-toggle="collapse" th:href="${'#s' + msg.id}">
@@ -80,6 +88,10 @@
                 <div th:id="${'s' + msg.id}" class="collapse">
                     <div class="card-body" th:utext="${msg.content}"></div>
                 </div>
+            </div>
+            <div class="jumbotron" th:if="${system.isEmpty()}">
+                <br>
+                <p>No new notification.</p>
             </div>
         </div>
     </div>

@@ -1,10 +1,12 @@
 package com.rcircle.service.gateway.controller;
 
+import com.rcircle.service.gateway.model.Account;
 import com.rcircle.service.gateway.model.LogFile;
 import com.rcircle.service.gateway.model.Message;
 import com.rcircle.service.gateway.services.*;
 import com.rcircle.service.gateway.utils.Base64;
 import com.rcircle.service.gateway.utils.MvcToolkit;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +44,17 @@ public class HomeController {
         mm.addAttribute("news", messageService.getMessageList(Message.TYPE_NEWS));
         mm.addAttribute("system", messageService.getMessageList(Message.TYPE_SYS));
         return "notification";
+    }
+
+    @GetMapping("profile")
+    public String changeProfile(Principal principal, ModelMap mm){
+        MvcToolkit.autoLoadTopMenuData(resourceService, mm);
+        MvcToolkit.autoLoadSideBarData(resourceService, mm);
+        MvcToolkit.autoLoadNewsData(messageService, mm);
+        mm.addAttribute("title", "Change your profile");
+        Account opAccount = accountService.getAccountInfo(0, principal.getName());
+        mm.addAttribute("account", opAccount);
+        return "profile";
     }
 
     @GetMapping(value = {"", "home"})

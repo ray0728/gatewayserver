@@ -10,6 +10,7 @@ import com.rcircle.service.gateway.model.ResultData;
 import com.rcircle.service.gateway.utils.Toolkit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -24,13 +25,27 @@ public class AccountService {
     @Autowired
     private RemoteAccountClient remoteAccountClient;
 
+    @HystrixCommand(fallbackMethod = "buildFallbackChangeProfile", threadPoolKey = "AccountThreadPool")
+    public Account changeProfile(String email, String signature, String resume, String avatar) {
+        String info = remoteAccountClient.changeProifle(email, signature, resume, avatar);
+        ResultData data = JSON.parseObject(info, ResultData.class);
+        return JSON.parseObject(data.getMap().get("account").toString(), Account.class);
+    }
+
+    @HystrixCommand(fallbackMethod = "buildFallbackChangePassword", threadPoolKey = "AccountThreadPool")
+    public Account changePassword(String oldpass, String newpass) {
+        String info = remoteAccountClient.changePassword(oldpass, newpass);
+        ResultData data = JSON.parseObject(info, ResultData.class);
+        return JSON.parseObject(data.getMap().get("account").toString(), Account.class);
+    }
+
     @HystrixCommand(fallbackMethod = "buildFallbackGetAccountInfo", threadPoolKey = "AccountThreadPool")
     public Account getAccountInfo(int id, String name) {
         String info = remoteAccountClient.getInfo(name, id);
         return JSON.parseObject(info, Account.class);
     }
 
-    public List<Account> getAllAccountBasicInfo(){
+    public List<Account> getAllAccountBasicInfo() {
         String info = remoteAccountClient.getInfo("", 0);
         return JSON.parseArray(info, Account.class);
     }
@@ -71,20 +86,30 @@ public class AccountService {
         return failinfo;
     }
 
+    private Account createErrorAccount(Throwable throwable){
+        Account account = new Account();
+        account.setErrinfo(autoDetectErrinfo(throwable));
+        return account;
+    }
+
+    private Account buildFallbackChangeProfile(String email, String signature, String resume, String avatar, Throwable throwable){
+        return createErrorAccount(throwable);
+    }
+
+    private Account buildFallbackChangePassword(String newpass, String oldpass, Throwable throwable){
+        return createErrorAccount(throwable);
+    }
+
     private List<Account> buildFallbackGetAllAcounts(Throwable throwable) {
         return null;
     }
 
     private Account buildFallbackAfterLoginSuccess(Throwable throwable) {
-        Account account = new Account();
-        account.setErrinfo(autoDetectErrinfo(throwable));
-        return account;
+        return createErrorAccount(throwable);
     }
 
     private Account buildFallbackGetAccountInfo(int id, String name, Throwable throwable) {
-        Account account = new Account();
-        account.setErrinfo(autoDetectErrinfo(throwable));
-        return account;
+        return createErrorAccount(throwable);
     }
 
     private int buildFallbackisExist(String username, String email, Throwable throwable) {

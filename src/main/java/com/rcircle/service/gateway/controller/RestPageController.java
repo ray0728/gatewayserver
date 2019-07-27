@@ -95,18 +95,46 @@ public class RestPageController {
         switch (accountService.isExist(name, email)) {
             case AccountService.ERR_USERNAME_EXIST:
                 response.setStatus(400);
-                ret ="username has been used";
+                ret = "username has been used";
                 break;
             case AccountService.ERR_EMAIL_EXIST:
                 response.setStatus(400);
-                ret ="email has been used";
+                ret = "email has been used";
                 break;
             case AccountService.ERR_SERVER_BUSY:
                 response.setStatus(400);
-                ret ="remote service busy, try again later";
+                ret = "remote service busy, try again later";
                 break;
             default:
                 break;
+        }
+        return ret;
+    }
+
+    @PostMapping("/account/changepass")
+    public String changePassword(HttpServletResponse response,
+                                 @RequestParam(name = "old") String oldpass,
+                                 @RequestParam(name = "new") String newpass) {
+        String ret = "";
+        Account account = accountService.changePassword(oldpass, newpass);
+        if (account.hasError()) {
+            response.setStatus(400);
+            ret = account.getErrinfo();
+        }
+        return ret;
+    }
+
+    @PostMapping("/account/changeprofile")
+    public String changeProfile(HttpServletResponse response,
+                                @RequestParam(name = "email", required = false, defaultValue = "") String email,
+                                @RequestParam(name = "signature", required = false, defaultValue = "") String signature,
+                                @RequestParam(name = "resume", required = false, defaultValue = "") String resume,
+                                @RequestParam(name = "avatar", required = false, defaultValue = "") String avatar) {
+        String ret = "";
+        Account account = accountService.changeProfile(email, signature, resume, avatar);
+        if (account.hasError()) {
+            response.setStatus(400);
+            ret = account.getErrinfo();
         }
         return ret;
     }

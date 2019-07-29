@@ -92,18 +92,23 @@ public class RestPageController {
                                    @RequestParam(name = "username") String name,
                                    @RequestParam(name = "email") String email) {
         String ret = "";
-        switch (accountService.isExist(name, email)) {
+        int errcode = accountService.isExist(name, null) | accountService.isExist(null, email);
+        switch (errcode) {
             case AccountService.ERR_USERNAME_EXIST:
                 response.setStatus(400);
-                ret = "username has been used";
+                ret = "Username has been used";
                 break;
             case AccountService.ERR_EMAIL_EXIST:
                 response.setStatus(400);
-                ret = "email has been used";
+                ret = "Email has been used";
+                break;
+            case AccountService.ERR_USERNAME_EMAIL_EXIST:
+                response.setStatus(400);
+                ret = "Username and email are already in use";
                 break;
             case AccountService.ERR_SERVER_BUSY:
                 response.setStatus(400);
-                ret = "remote service busy, try again later";
+                ret = "Remote service busy, try again later";
                 break;
             default:
                 break;
@@ -128,10 +133,9 @@ public class RestPageController {
     public String changeProfile(HttpServletResponse response,
                                 @RequestParam(name = "email", required = false, defaultValue = "") String email,
                                 @RequestParam(name = "signature", required = false, defaultValue = "") String signature,
-                                @RequestParam(name = "resume", required = false, defaultValue = "") String resume,
-                                @RequestParam(name = "avatar", required = false, defaultValue = "") String avatar) {
+                                @RequestParam(name = "resume", required = false, defaultValue = "") String resume) {
         String ret = "";
-        Account account = accountService.changeProfile(email, signature, resume, avatar);
+        Account account = accountService.changeProfile(email, signature, resume);
         if (account.hasError()) {
             response.setStatus(400);
             ret = account.getErrinfo();

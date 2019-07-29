@@ -20,7 +20,6 @@ public interface RemoteAccountClient {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/account/edit")
     public String changeProifle(@RequestParam(name = "email") String email,
-                                @RequestParam(name = "signature") String profile,
-                                @RequestParam(name = "resume") String resume,
-                                @RequestParam(name = "avatar") String header);
+                                @RequestParam(name = "signature") String signature,
+                                @RequestParam(name = "resume") String resume);
 }

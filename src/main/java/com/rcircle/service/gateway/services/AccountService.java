@@ -21,13 +21,14 @@ import java.util.Map;
 public class AccountService {
     public static final int ERR_USERNAME_EXIST = 1;
     public static final int ERR_EMAIL_EXIST = 2;
-    public static final int ERR_SERVER_BUSY = 3;
+    public static final int ERR_USERNAME_EMAIL_EXIST = 3;
+    public static final int ERR_SERVER_BUSY = 7;
     @Autowired
     private RemoteAccountClient remoteAccountClient;
 
     @HystrixCommand(fallbackMethod = "buildFallbackChangeProfile", threadPoolKey = "AccountThreadPool")
-    public Account changeProfile(String email, String signature, String resume, String avatar) {
-        String info = remoteAccountClient.changeProifle(email, signature, resume, avatar);
+    public Account changeProfile(String email, String signature, String resume) {
+        String info = remoteAccountClient.changeProifle(email, signature, resume);
         ResultData data = JSON.parseObject(info, ResultData.class);
         return JSON.parseObject(data.getMap().get("account").toString(), Account.class);
     }
@@ -58,13 +59,19 @@ public class AccountService {
 
     @HystrixCommand(fallbackMethod = "buildFallbackisExist", threadPoolKey = "AccountThreadPool")
     public int isExist(String username, String email) {
-        Account existAccount = getAccountInfo(0, username);
-        if (existAccount != null && !existAccount.hasError()) {
-            return ERR_USERNAME_EXIST;
-        }
-        existAccount = getAccountInfo(0, email);
-        if (existAccount != null && !existAccount.hasError()) {
-            return ERR_EMAIL_EXIST;
+        Account existAccount = null;
+        if(username != null && !username.isEmpty()){
+            existAccount = getAccountInfo(0, username);
+            if (existAccount != null && !existAccount.hasError()) {
+                return ERR_USERNAME_EXIST;
+            }
+        }else if(email != null && !email.isEmpty()){
+            existAccount = getAccountInfo(0, email);
+            if (existAccount != null && !existAccount.hasError()) {
+                return ERR_EMAIL_EXIST;
+            }
+        }else{
+            return ERR_SERVER_BUSY;
         }
         return 0;
     }

@@ -99,7 +99,7 @@ public class AccountService {
         return account;
     }
 
-    private Account buildFallbackChangeProfile(String email, String signature, String resume, String avatar, Throwable throwable){
+    private Account buildFallbackChangeProfile(String email, String signature, String resume, Throwable throwable){
         return createErrorAccount(throwable);
     }
 

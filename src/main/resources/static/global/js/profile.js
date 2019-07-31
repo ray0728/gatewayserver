@@ -54,6 +54,7 @@ changeProfile = function (progress) {
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (ret) {
         $(progress[0]).css("width", "100%");
+        $('#changeAcountModal').modal('hide');
     }).error(function(xhr, status, info){
         errorOccurred(xhr.responseText);
     });

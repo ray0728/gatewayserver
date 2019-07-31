@@ -92,6 +92,10 @@ public class RestPageController {
                                    @RequestParam(name = "username") String name,
                                    @RequestParam(name = "email") String email) {
         String ret = "";
+        if(name == null || email == null || name.isEmpty() || email.isEmpty()){
+            response.setStatus(400);
+            return "User name and password must be required";
+        }
         int errcode = accountService.isExist(name, null) | accountService.isExist(null, email);
         switch (errcode) {
             case AccountService.ERR_USERNAME_EXIST:

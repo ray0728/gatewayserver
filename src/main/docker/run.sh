@@ -39,4 +39,6 @@ java -Djava.security.egd=file:/dev/./urandom                \
      -Dspring.kafka.bootstrap-servers=$KAFKA_URI            \
      -Dspring.zipkin.base-url=$ZIPKIN_URI                   \
      -Dspring.profiles.active=$PROFILE                      \
+     -Xdebug -Xnoagent -Djava.compiler=NONE                 \
+     -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_PORT \
 -jar /usr/local/server/@project.build.finalName@.jar

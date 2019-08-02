@@ -20,7 +20,7 @@ public class Account implements Authentication, CredentialsContainer {
     private Object detials;
     private String signature;
     private String resume;
-    private String avatar;
+    private String avatar = "0";
     private JWTToken jwtToken = null;
     private boolean authenticated = false;
     private String errinfo;

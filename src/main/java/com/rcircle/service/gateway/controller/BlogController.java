@@ -35,8 +35,6 @@ public class BlogController {
         LogFile log = null;
         if (id != 0) {
             log = resourceService.getBlog(id, false);
-            mm.addAttribute("log", log);
-            mm.addAttribute("context", log.getDetail().getLog());
         }
         if (log == null) {
             log = new LogFile();
@@ -44,6 +42,7 @@ public class BlogController {
         }
         mm.addAttribute("title", id == 0 ? "Create New Blog" : "Edit - " + log.getTitle());
         mm.addAttribute("res_id", id);
+        mm.addAttribute("log", log);
         return "blog_edit";
     }
 

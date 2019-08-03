@@ -126,8 +126,6 @@ public class LogFile implements Serializable {
         return formattags;
     }
 
-    ;
-
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }

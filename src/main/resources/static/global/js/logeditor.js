@@ -230,16 +230,17 @@ errorOccurred = function () {
 createLog = function (header, progress) {
     header.text("Prepare to create an article");
     $.post("/api/res/blog/new", {
+        'category': $("#select_category").find(":selected").val(),
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (data, status) {
-        status == "success" && $(progress[0]).css("width", "25%") && updateLog(data, progress);
-        status != "success" && errorOccurred();
+        $(progress[0]).css("width", "25%") && updateLog(data, progress);
+    }).error(function(xhr, status, info){
+        errorOccurred();
     });
 };
 
 updateLog = function (lid, progress) {
     let title = $($.find('input[name="title"]')).val();
-    let category = $("#select_category").find(":selected").val();
     let tags = $($.find('input[name="tag"]')).val().replace(/；/g, ";").split(";");
     tags = tags.filter(function (s) {
         return s && s.trim();
@@ -250,12 +251,12 @@ updateLog = function (lid, progress) {
         'id': lid,
         'log': $(code).html(),
         'title': title,
-        'type': category,
         'tags':tags,
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (ret, status) {
-        status == "success" && $(progress[0]).css("width", "50%") && uploadCover(lid);
-        status != "success" && errorOccurred();
+        $(progress[0]).css("width", "50%") && uploadCover(lid);
+    }).error(function(xhr, status, info){
+        errorOccurred();
     });
 };
 

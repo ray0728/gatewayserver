@@ -87,10 +87,12 @@ $("#extmodal").on('show.bs.modal', function (e) {
     source = $.trim(source);
     if (source == "Publish") {
         header.text("Prepare to create an article") && content.html(createBody());
+        $('#btn-close').attr("publish","true");
     } else {
         let title = $($.find('input[name="title"]')).val();
         let code = $('#summernote').summernote('code');
         header.text(title);
+        $('#btn-close').attr("publish","false");
         content.html(code);
     }
 });
@@ -127,13 +129,16 @@ $('#extmodal').on('shown.bs.modal', function (e) {
 
 abortUpload = function (resid) {
     abort_upload = true;
-    $.ajax({
-        url: "/api/res/blog/files?id=" + resid + "&name=" + xhr_upload.join(";"),
-        type: "Delete",
-        cache: false,
-        processData: false,
-        contentType: false
-    });
+    if(resid != 0) {
+        $.ajax({
+            url: "/api/res/blog/files?id=" + resid + "&name=" + xhr_upload.join(";"),
+            type: "Delete",
+            cache: false,
+            processData: false,
+            contentType: false
+        });
+    }
+    $('#extmodal').modal('hide');
 };
 
 $('#extmodal').on('hidden.bs.modal', function (e) {
@@ -240,18 +245,14 @@ createLog = function (header, progress) {
 };
 
 updateLog = function (lid, progress) {
-    let title = $($.find('input[name="title"]')).val();
-    let tags = $($.find('input[name="tag"]')).val().replace(/；/g, ";").split(";");
-    tags = tags.filter(function (s) {
-        return s && s.trim();
-    });
-    $('#summernote').summernote('code');
-    let code = replaceNode($('#summernote').summernote('code'), lid);
     $.post("/api/res/blog/update", {
         'id': lid,
-        'log': $(code).html(),
-        'title': title,
-        'tags':tags,
+        'log':$(replaceNode($('#summernote').summernote('code'), lid)).html(),
+        'title': $($.find('input[name="title"]')).val(),
+        'category': $("#select_category").find(":selected").val(),
+        'tags':$($.find('input[name="tag"]')).val().replace(/；/g, ";").split(";").filter(function (s) {
+            return s && s.trim();
+        }),
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (ret, status) {
         $(progress[0]).css("width", "50%") && uploadCover(lid);
@@ -462,6 +463,7 @@ $('#upload_cover').on("change", function (e) {
 
 $('#btn-close').on('click', function () {
     let resid = $($.find('div[name="context"]')[0]).data("id");
-    abortUpload(resid);
+    ($(this).attr("publish") == "true") && abortUpload(resid);
+    ($(this).attr("publish") == "false") && abortUpload(0);
 });
 

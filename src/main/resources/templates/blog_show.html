@@ -17,7 +17,7 @@
 <div th:include="public::topbar"></div>
 <div id="errinfo" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Error occurred! </strong><span></span>
+    <span>Java script is not running, please check your browser settings and refreshes page</span>
 </div>
 <div class="single-blog-wrapper section-padding-0-100">
     <div class="single-blog-area blog-style-2 mb-50">
@@ -71,7 +71,7 @@
                         <span class="author-role">Author</span>
                         <h4><a th:href='${"/author?id=" + author.uid}' class="author-name" th:text="${author.name}"></a>
                         </h4>
-                        <p th:text="${author.profile}"></p>
+                        <p th:text="${author.autoDetectResume()}"></p>
                     </div>
                 </div>
                 <div id="comments">

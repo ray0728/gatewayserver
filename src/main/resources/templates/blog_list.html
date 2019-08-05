@@ -19,7 +19,8 @@
             <div id="list_area">
                 <div th:fragment="log_list" class="single-blog-area blog-style-2 mb-50 wow fadeInUp"
                      th:each="log,state:${logs}"
-                     th:data-wow-delay="${'0.' + state.index+ 's'}">
+                     th:data-wow-delay="${'0.' + state.index+ 's'}"
+                     th:if="${count > 0}">
                     <div class="row align-items-center">
                         <div class="col-12 col-md-6">
                             <div class="single-blog-thumbnail">
@@ -52,7 +53,8 @@
                                                              th:href="${'?page='+ (page - 3) + query_param}"><span
                         class="fa fa-angle-double-left"></span></a>
                 </li>
-                <li class="page-item"><a class="page-link page-inner-query" th:href="${'/blog/page/' + page + '?' + query_param}"
+                <li class="page-item"><a class="page-link page-inner-query"
+                                         th:href="${'/blog/page/' + page + '?' + query_param}"
                                          th:text="${page}"></a></li>
                 <li th:if="${(page * 10) < count}" class="page-item"><a class="page-link page-inner-query"
                                                                         th:href="${'/blog/page/' + (page + 1) + '?' + query_param}"

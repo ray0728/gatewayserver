@@ -8,7 +8,7 @@ $(document).ready(function(){
             easing: 'swing',
             effectType: 'roll'
         });
-    }
+    };
     setInterval(checkNews, 10000);
 });
 
@@ -16,7 +16,7 @@ checkNews = function () {
     clearInterval(tickerclock);
     $("#newsarea").load("/news");
     restclock = setInterval(resetNews, 1000);
-}
+};
 
 resetNews = function () {
     if ($.fn.simpleTicker) {
@@ -28,4 +28,4 @@ resetNews = function () {
         });
     }
     clearInterval(restclock);
-}
+};

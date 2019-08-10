@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    let alltext = $.find('p[class="card-text"]')
+    let alltext = $.find('p[class="card-text"]');
     $.each(alltext, function (index, text) {
         limit(text, 3);
-    })
+    });
 });
 
 function limit(obj, row) {
@@ -24,5 +24,5 @@ function limit(obj, row) {
         $(obj).append(span2);
         $(obj).append(span3);
         $(obj).append(span4);
-    }
-}
+    };
+};

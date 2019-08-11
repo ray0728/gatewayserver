@@ -22,4 +22,13 @@ public interface RemoteAccountClient {
     public String changeProifle(@RequestParam(name = "email") String email,
                                 @RequestParam(name = "signature") String signature,
                                 @RequestParam(name = "resume") String resume);
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/invitation/check_code")
+    public int checkCode(@RequestParam(name = "code") String code);
+
+    @RequestMapping(method = RequestMethod.GET, value = "/invitation/update")
+    public String updateCode(@RequestParam(name = "uid") int uid,
+                             @RequestParam(name = "cid") int cid,
+                             @RequestParam(name = "code") String code);
 }

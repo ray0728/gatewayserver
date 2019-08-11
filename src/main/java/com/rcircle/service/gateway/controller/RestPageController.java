@@ -92,7 +92,7 @@ public class RestPageController {
                                    @RequestParam(name = "username") String name,
                                    @RequestParam(name = "email") String email) {
         String ret = "";
-        if(name == null || email == null || name.isEmpty() || email.isEmpty()){
+        if (name == null || email == null || name.isEmpty() || email.isEmpty()) {
             response.setStatus(400);
             return "User name and password must be required";
         }
@@ -145,5 +145,29 @@ public class RestPageController {
             ret = account.getErrinfo();
         }
         return ret;
+    }
+
+    @GetMapping("/invitation/check_code")
+    public String getCodeId(HttpServletResponse response,
+                            @RequestParam(name = "code") String code) {
+        if (code == null || code.isEmpty()) {
+            response.setStatus(400);
+            return "A valid invitation code must be provided";
+        }
+        int id = accountService.getInvitationCodeId(code);
+        if (id == 0) {
+            response.setStatus(400);
+            return "A valid invitation code must be provided";
+        }
+        return String.valueOf(id);
+    }
+
+    @PostMapping("/invitation/update")
+    public String updateInvitationCode(HttpServletResponse response,
+                                       @RequestParam(name = "id") int id,
+                                       @RequestParam(name = "uid") int uid,
+                                       @RequestParam(name = "code") String code) {
+        accountService.updateInvitationCode(id, uid, code);
+        return "";
     }
 }

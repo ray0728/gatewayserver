@@ -14,12 +14,8 @@ $('#upload_avatar').on("change", function (e) {
 
 $('#createAccountModal').on('shown.bs.modal', function (e) {
     let progress = $(this).find('div.progress-bar');
-    $.post("/rst/account/check", {
-        'username': $('#username').val(),
-        'email': $('#email').val(),
-        '_csrf': $("meta[name='_csrf']").attr("content")
-    }, function(){
-        processAvatarUpload(progress);
+    $.get("/rst/invitation/check_code?code=" + $('#code').val(), function (data, status) {
+        checkAccount(data, progress);
     }).error(function (xhr, status, info) {
         errorOccurred(xhr.responseText);
     });
@@ -30,6 +26,18 @@ $('#createAccountModal').on('hidden.bs.modal', function (e) {
     $(progress[0]).css("width", "0%");
 });
 
+checkAccount = function (codeid, progress) {
+    $.post("/rst/account/check", {
+        'username': $('#username').val(),
+        'email': $('#email').val(),
+        '_csrf': $("meta[name='_csrf']").attr("content")
+    }, function () {
+        processAvatarUpload(codeid, progress);
+    }).error(function (xhr, status, info) {
+        errorOccurred(xhr.responseText);
+    });
+}
+
 errorOccurred = function (msg) {
     $("#errinfo").is(':hidden') && $("#errinfo").show();
     let spanobj = $("#errinfo").find("span");
@@ -38,7 +46,19 @@ errorOccurred = function (msg) {
     $('#createAccountModal').modal('hide');
 };
 
-createAccountWithoutAvatar = function (progress) {
+finishCreate = function (codeid, uid, progress) {
+    $.post("/rst/invitation/update", {
+        'id': codeid,
+        'uid': uid,
+        'code': $('#code').val(),
+        '_csrf': $("meta[name='_csrf']").attr("content")
+    }, function () {
+        $(progress).css('width', '100%');
+        window.location.href = "/login";
+    });
+}
+
+createAccountWithoutAvatar = function (codeid, progress) {
     $.post("/api/user/account/create", {
         'username': $('#username').val(),
         'email': $('#email').val(),
@@ -47,21 +67,20 @@ createAccountWithoutAvatar = function (progress) {
         'resume': $('#resume').val(),
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (ret) {
-        $(progress[0]).css("width", "100%");
-        window.location.href = "/login";
-    }).error(function(xhr, status, info){
+        finishCreate(codeid, ret.uid, progress);
+    }).error(function (xhr, status, info) {
         errorOccurred(xhr.responseText);
     });
 }
 
-processAvatarUpload = function (progress) {
+processAvatarUpload = function (codeid, progress) {
     let url = $('#avatar_img').attr("src");
     let filename = $('#avatar_img').data("filename");
-    filename && blobFileTransfer(filename, url, progress);
-    !filename && createAccountWithoutAvatar(progress);
+    filename && blobFileTransfer(codeid, filename, url, progress);
+    !filename && createAccountWithoutAvatar(codeid, progress);
 };
 
-blobFileTransfer = function (filename, url, progress) {
+blobFileTransfer = function (codeid, filename, url, progress) {
     let xhr = new XMLHttpRequest;
     xhr.responseType = 'blob';
     xhr.onload = function () {
@@ -73,14 +92,14 @@ blobFileTransfer = function (filename, url, progress) {
             compressImage(filename, new File([blobdata], filename, {
                 type: blobdata.type,
                 lastModified: Date.now()
-            }), progress);
+            }), codeid, progress);
         }
     };
     xhr.open('GET', url, true);
     xhr.send();
 };
 
-compressImage = function (filename, file, progress) {
+compressImage = function (filename, file, codeid, progress) {
     let ready = new FileReader();
     ready.readAsDataURL(file);
     ready.onload = function () {
@@ -111,12 +130,12 @@ compressImage = function (filename, file, progress) {
             let base64 = canvas.toDataURL('image/jpeg', quality);
             let afterfile = convertBase64UrlToFile(filename, base64);
             $(progress[0]).css("width", "50%");
-            sliceUpload(afterfile, progress);
+            sliceUpload(afterfile, codeid, progress);
         }
     }
 }
 
-sliceUpload = function (file, progress) {
+sliceUpload = function (file, codeid, progress) {
     let checksum;
     let blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
     let spark = new SparkMD5();
@@ -145,15 +164,8 @@ sliceUpload = function (file, progress) {
             cache: false,
             processData: false,
             contentType: false,
-            success: function (respond) {
-                if (respond == "resend") {
-                    fileReader.readAsBinaryString(filedata);
-                } else if (respond == "abort") {
-                    errorOccurred("");
-                } else {
-                    $(progress).css('width', '100%');
-                    window.location.href = "/login";
-                }
+            success: function (ret) {
+                finishCreate(codeid, ret.uid, progress);
             },
             error: function (ret) {
                 errorOccurred("");

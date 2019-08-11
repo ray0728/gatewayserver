@@ -76,6 +76,16 @@ public class AccountService {
         return 0;
     }
 
+    @HystrixCommand(fallbackMethod = "buildFallbackGetInviationCodeId", threadPoolKey = "AccountThreadPool")
+    public int getInvitationCodeId(String code){
+        return remoteAccountClient.checkCode(code);
+    }
+
+    @HystrixCommand(fallbackMethod = "buildFallbackUpdateInviationCode", threadPoolKey = "AccountThreadPool")
+    public String updateInvitationCode(int id, int uid, String code){
+        return remoteAccountClient.updateCode(uid, id, code);
+    }
+
     @HystrixCommand(fallbackMethod = "buildFallbackAfterLoginSuccess", threadPoolKey = "AccountThreadPool")
     public Account afterLoginSuccess() {
         String ret = remoteAccountClient.refreshTime();
@@ -121,5 +131,13 @@ public class AccountService {
 
     private int buildFallbackisExist(String username, String email, Throwable throwable) {
         return ERR_SERVER_BUSY;
+    }
+
+    private int buildFallbackGetInviationCodeId(String code, Throwable throwable){
+        return 0;
+    }
+
+    private String buildFallbackUpdateInviationCode(int id, int uid, String code, Throwable throwable){
+        return autoDetectErrinfo(throwable);
     }
 }

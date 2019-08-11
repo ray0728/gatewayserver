@@ -71,7 +71,7 @@ public class RestPageController {
                                @RequestParam(name = "file") String filename) {
         LogFile log = resourceService.getBlog(logid, true);
         Account opAccount = accountService.getAccountInfo(0, principal.getName());
-        if (log.getUid() != opAccount.getUid()) {
+        if (log == null || log.getUid() != opAccount.getUid()) {
             throw new PermissionDeniedDataAccessException("You don't have permission to access this data", null);
         }
         return "" + messageService.checkHLSResult(logid, filename);

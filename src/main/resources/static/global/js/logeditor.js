@@ -87,12 +87,12 @@ $("#extmodal").on('show.bs.modal', function (e) {
     source = $.trim(source);
     if (source == "Publish") {
         header.text("Prepare to create an article") && content.html(createBody());
-        $('#btn-close').attr("publish","true");
+        $('#btn-close').attr("publish", "true");
     } else {
         let title = $($.find('input[name="title"]')).val();
         let code = $('#summernote').summernote('code');
         header.text(title);
-        $('#btn-close').attr("publish","false");
+        $('#btn-close').attr("publish", "false");
         content.html(code);
     }
 });
@@ -129,7 +129,7 @@ $('#extmodal').on('shown.bs.modal', function (e) {
 
 abortUpload = function (resid) {
     abort_upload = true;
-    if(resid != 0) {
+    if (resid != 0) {
         $.ajax({
             url: "/api/res/blog/files?id=" + resid + "&name=" + xhr_upload.join(";"),
             type: "Delete",
@@ -239,7 +239,7 @@ createLog = function (header, progress) {
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (data, status) {
         $(progress[0]).css("width", "25%") && updateLog(data, progress);
-    }).error(function(xhr, status, info){
+    }).error(function (xhr, status, info) {
         errorOccurred();
     });
 };
@@ -247,16 +247,16 @@ createLog = function (header, progress) {
 updateLog = function (lid, progress) {
     $.post("/api/res/blog/update", {
         'id': lid,
-        'log':$(replaceNode($('#summernote').summernote('code'), lid)).html(),
+        'log': $(replaceNode($('#summernote').summernote('code'), lid)).html(),
         'title': $($.find('input[name="title"]')).val(),
         'category': $("#select_category").find(":selected").val(),
-        'tags':$($.find('input[name="tag"]')).val().replace(/；/g, ";").split(";").filter(function (s) {
+        'tags': $($.find('input[name="tag"]')).val().replace(/；/g, ";").split(";").filter(function (s) {
             return s && s.trim();
         }),
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (ret, status) {
         $(progress[0]).css("width", "50%") && uploadCover(lid);
-    }).error(function(xhr, status, info){
+    }).error(function (xhr, status, info) {
         errorOccurred();
     });
 };
@@ -327,7 +327,13 @@ blobFileTransfer = function (lid, filename, url, type, progress, nextstep) {
             }), type, progress, nextstep);
         }
     };
-    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function () {
+        xhr.readyState == 4 && xhr.status != 200 && errorOccurred();
+    };
+    xhr.onerror = function (e) {
+        errorOccurred();
+    }
+    xhr.open('GET', url);
     xhr.send();
 };
 

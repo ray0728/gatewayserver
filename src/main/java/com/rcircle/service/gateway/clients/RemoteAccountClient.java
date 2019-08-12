@@ -27,7 +27,7 @@ public interface RemoteAccountClient {
     @RequestMapping(method = RequestMethod.GET, value = "/invitation/check_code")
     public int checkCode(@RequestParam(name = "code") String code);
 
-    @RequestMapping(method = RequestMethod.GET, value = "/invitation/update")
+    @RequestMapping(method = RequestMethod.PUT, value = "/invitation/update")
     public String updateCode(@RequestParam(name = "uid") int uid,
                              @RequestParam(name = "cid") int cid,
                              @RequestParam(name = "code") String code);

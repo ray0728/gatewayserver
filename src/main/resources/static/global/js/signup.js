@@ -67,7 +67,7 @@ createAccountWithoutAvatar = function (codeid, progress) {
         'resume': $('#resume').val(),
         '_csrf': $("meta[name='_csrf']").attr("content")
     }, function (ret) {
-        finishCreate(codeid, ret.uid, progress);
+        finishCreate(codeid, jQuery.parseJSON(ret).map.uid, progress);
     }).error(function (xhr, status, info) {
         errorOccurred(xhr.responseText);
     });
@@ -165,7 +165,7 @@ sliceUpload = function (file, codeid, progress) {
             processData: false,
             contentType: false,
             success: function (ret) {
-                finishCreate(codeid, ret.uid, progress);
+                finishCreate(codeid, jQuery.parseJSON(ret).map.uid, progress);
             },
             error: function (ret) {
                 errorOccurred("");

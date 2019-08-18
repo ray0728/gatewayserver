@@ -81,7 +81,7 @@
                             <li class="single_comment_area" th:each="reply:${replies}">
                                 <div class="comment-content d-flex">
                                     <div class="comment-author">
-                                        <img src="/global/img/bg-img/b7.jpg">
+                                        <img th:src='${"/global/img/bg-img/" + reply.avatar + ".jpg"}'>
                                     </div>
                                     <div class="comment-meta">
                                         <a class="post-date"

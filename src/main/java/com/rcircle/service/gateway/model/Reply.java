@@ -11,6 +11,7 @@ public class Reply  implements Serializable {
     private String username;
     private String email;
     private String desc;
+    private String avatar;
     private long date;
 
     public int getId() {
@@ -79,5 +80,13 @@ public class Reply  implements Serializable {
 
     public int getDay() {
         return Toolkit.getDayFrom(date);
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

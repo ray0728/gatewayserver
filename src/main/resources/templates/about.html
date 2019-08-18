@@ -17,9 +17,7 @@
         <div id="original-load"></div>
     </div>
 </div>
-
 <div th:include="public::topbar"></div>
-<!-- ##### Breadcumb Area Start ##### -->
 <div class="breadcumb-area bg-img" style="background-image: url(global/img/bg-img/about.jpg);">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
@@ -42,7 +40,9 @@
                     <!-- Blog Content -->
                     <div class="single-blog-content">
                         <h4><a href="#" class="post-headline">Welcome to Ray's blog</a></h4>
-                        <p class="mb-3">.</p>
+                        <p class="mb-3">This is a website that shares the programming experience with everyone, which
+                            records the bits and pieces of our programming process. hopefully this can provide
+                            beneficial help to everyone. The world of programmers we understand.<br/> Coding, it's fun..</p>
                     </div>
                 </div>
             </div>
@@ -51,12 +51,10 @@
                 <div class="single-blog-area clearfix mb-100">
                     <!-- Blog Content -->
                     <div class="single-blog-content">
-                        <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tempus
-                            vestibulum mauris quis aliquam. Integer accumsan sodales odio, id tempus velit ullamcorper
-                            id. Quisque at erat eu libero consequat tempus. Quisque molestie convallis tempus. Ut semper
-                            purus metus, a euismod sapien sodales ac. Duis viverra eleifend fermentum. Donec sagittis
-                            lacus sit amet augue sodales, vel cursus enim tristique. Maecenas vitae massa ut est
-                            consectetur sagittis quis vitae tortor.</p>
+                        <p class="mb-3">站点主体框架基于Spring
+                            cloud搭建，利用<a href="https://getbootstrap.com/">Bootstrap</a>实现响应时HTML模板，内容编辑则选用了<a href="https://summernote.org/">summernote编辑器</a>，
+                            感谢这个世界上有开源的存在，才让我们搭建网站变得更加容易,也让我们有机会在网络的世界和大家分享一切。
+                        </p>
                     </div>
                 </div>
             </div>
@@ -70,8 +68,6 @@
             <div class="hero-area col-md-8 col-12">
                 <div class="hero-slides">
                     <a th:href='${"/author?id=" + author.uid}' th:each="author:${authors}" class="single-hero-slide">
-                        <!--                        <div class="container">-->
-                        <!--                            <div class="row">-->
                         <div class="card">
                             <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
                             <div class="card-body">
@@ -79,43 +75,18 @@
                                 <p class="card-text" th:text="${author.autoDetectResume()}"></p>
                             </div>
                         </div>
-
-                        <div class="card">
-                            <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
-                            <div class="card-body">
-                                <h4 class="card-title" th:text="${author.name}"></h4>
-                                <p class="card-text" th:text="${author.autoDetectResume()}"></p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
-                            <div class="card-body">
-                                <h4 class="card-title" th:text="${author.name}"></h4>
-                                <p class="card-text" th:text="${author.autoDetectResume()}"></p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
-                            <div class="card-body">
-                                <h4 class="card-title" th:text="${author.name}"></h4>
-                                <p class="card-text" th:text="${author.autoDetectResume()}"></p>
-                            </div>
-                        </div>
-                        <!--                            </div>-->
-                        <!--                        </div>-->
                     </a>
                 </div>
             </div>
-                        <a href='/contact' class="col-12 col-md-4">
-                            <div class="card">
-                                <img class="card-img-top" src="/global/img/default-avatar.png" alt="Card image"/>
-                                <div class="card-body">
-                                    <h4 class="card-title">We need you!</h4>
-                                    <p class="card-text">Your ability is far beyond your imagination, don't let it disappear
-                                        into your plain life.</p>
-                                </div>
-                            </div>
-                        </a>
+            <a href='/contact' class="col-12 col-md-4">
+                <div class="card">
+                    <img class="card-img-top" src="/global/img/default-avatar.png" alt="Card image"/>
+                    <div class="card-body">
+                        <h4 class="card-title">We need you!</h4>
+                        <p class="card-text">Your ability is far beyond your imagination</p>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </div>

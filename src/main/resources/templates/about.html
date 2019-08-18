@@ -68,79 +68,54 @@
         <h4>Our Members</h4>
         <div class="row">
             <div class="hero-area col-md-8 col-12">
-                <div class="hero-slides owl-carousel">
-                    <div th:each="author:${authors}" class="single-hero-slide">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <a th:href='${"/author?id=" + author.uid}'>
-                                    <div class="card">
-                                        <img class="card-img-top" th:src="${author.avatar}"/>
-                                        <div class="card-body">
-                                            <h4 class="card-title" th:text="${author.name}"></h4>
-                                            <p class="card-text" th:text="${author.autoDetectResume()}"></p>
-                                        </div>
-                                    </div>
-                                </a>
+                <div class="hero-slides">
+                    <a th:href='${"/author?id=" + author.uid}' th:each="author:${authors}" class="single-hero-slide">
+                        <!--                        <div class="container">-->
+                        <!--                            <div class="row">-->
+                        <div class="card">
+                            <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="${author.name}"></h4>
+                                <p class="card-text" th:text="${author.autoDetectResume()}"></p>
                             </div>
                         </div>
-                    </div>
-                    <div th:each="author:${authors}" class="single-hero-slide">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <a th:href='${"/author?id=" + author.uid}'>
-                                    <div class="card">
-                                        <img class="card-img-top" th:src="${author.avatar}"/>
-                                        <div class="card-body">
-                                            <h4 class="card-title" th:text="${author.name}"></h4>
-                                            <p class="card-text" th:text="${author.autoDetectResume()}"></p>
-                                        </div>
-                                    </div>
-                                </a>
+
+                        <div class="card">
+                            <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="${author.name}"></h4>
+                                <p class="card-text" th:text="${author.autoDetectResume()}"></p>
                             </div>
                         </div>
-                    </div>
-                    <div th:each="author:${authors}" class="single-hero-slide">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <a th:href='${"/author?id=" + author.uid}'>
-                                    <div class="card">
-                                        <img class="card-img-top" th:src="${author.avatar}"/>
-                                        <div class="card-body">
-                                            <h4 class="card-title" th:text="${author.name}"></h4>
-                                            <p class="card-text" th:text="${author.autoDetectResume()}"></p>
-                                        </div>
-                                    </div>
-                                </a>
+                        <div class="card">
+                            <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="${author.name}"></h4>
+                                <p class="card-text" th:text="${author.autoDetectResume()}"></p>
                             </div>
                         </div>
-                    </div>
-                    <div th:each="author:${authors}" class="single-hero-slide">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <a th:href='${"/author?id=" + author.uid}'>
-                                    <div class="card">
-                                        <img class="card-img-top" th:src="${author.avatar}"/>
-                                        <div class="card-body">
-                                            <h4 class="card-title" th:text="${author.name}"></h4>
-                                            <p class="card-text" th:text="${author.autoDetectResume()}"></p>
-                                        </div>
-                                    </div>
-                                </a>
+                        <div class="card">
+                            <img class="card-img-top" th:src="${author.avatar}" style="height: 100%"/>
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="${author.name}"></h4>
+                                <p class="card-text" th:text="${author.autoDetectResume()}"></p>
                             </div>
                         </div>
-                    </div>
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                    </a>
                 </div>
             </div>
-            <a href='/contact' class="col-12 col-md-4">
-                <div class="card">
-                    <img class="card-img-top" src="/global/img/default-avatar.png" alt="Card image"/>
-                    <div class="card-body">
-                        <h4 class="card-title">We need you!</h4>
-                        <p class="card-text">Your ability is far beyond your imagination, don't let it disappear
-                            into your plain life.</p>
-                    </div>
-                </div>
-            </a>
+                        <a href='/contact' class="col-12 col-md-4">
+                            <div class="card">
+                                <img class="card-img-top" src="/global/img/default-avatar.png" alt="Card image"/>
+                                <div class="card-body">
+                                    <h4 class="card-title">We need you!</h4>
+                                    <p class="card-text">Your ability is far beyond your imagination, don't let it disappear
+                                        into your plain life.</p>
+                                </div>
+                            </div>
+                        </a>
         </div>
     </div>
 </div>

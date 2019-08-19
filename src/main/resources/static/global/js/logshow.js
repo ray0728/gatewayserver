@@ -37,7 +37,7 @@ $('.original-btn').click(function () {
         formData.append("message", message);
         formData.append("_csrf", $("meta[name='_csrf']").attr("content"));
         $.ajax({
-            url: "/api/blog/res/reply/new",
+            url: "/api/res/reply/new",
             data: formData,
             type: "Post",
             cache: false,

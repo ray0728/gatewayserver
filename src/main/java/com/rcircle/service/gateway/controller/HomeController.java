@@ -126,7 +126,7 @@ public class HomeController {
         MvcToolkit.autoLoadSideBarData(resourceService, mm);
         MvcToolkit.autoLoadNewsData(messageService, mm);
         mm.addAttribute("errnum", num);
-        mm.addAttribute("title", "Contact us");
+        mm.addAttribute("title", "Error - " + num);
         mm.addAttribute("errdesc", HttpStatus.resolve(num).getReasonPhrase());
         return "error";
     }

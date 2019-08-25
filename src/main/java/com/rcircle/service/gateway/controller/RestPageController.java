@@ -182,7 +182,7 @@ public class RestPageController {
     public ResponseEntity authorAvatar(){
         String errinfo;
         try {
-            return createResponseEntity("/global/img/author/me.jpg");
+            return createResponseEntity("/mnt/img/author/me.jpg");
         }catch (IOException e){
             errinfo = e.getMessage();
         }

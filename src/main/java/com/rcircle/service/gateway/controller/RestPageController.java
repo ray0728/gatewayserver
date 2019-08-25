@@ -15,6 +15,10 @@ import com.rcircle.service.gateway.utils.HttpContextHolder;
 import com.rcircle.service.gateway.utils.Toolkit;
 import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.dao.PermissionDeniedDataAccessException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -169,5 +176,28 @@ public class RestPageController {
                                        @RequestParam(name = "code") String code) {
         accountService.updateInvitationCode(id, uid, code);
         return "";
+    }
+
+    @GetMapping("/author/avatar")
+    public ResponseEntity authorAvatar(){
+        String errinfo;
+        try {
+            return createResponseEntity("/global/img/author/me.jpg");
+        }catch (IOException e){
+            errinfo = e.getMessage();
+        }
+        return ResponseEntity.status(404).body(errinfo);
+    }
+
+    ResponseEntity createResponseEntity(String filePath) throws IOException {
+        MediaType mediaType = MediaType.parseMediaType("image/jpg");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(mediaType);
+        File file = new File(filePath);
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        inputStream.close();
+        return new ResponseEntity(bytes, headers, HttpStatus.OK);
     }
 }

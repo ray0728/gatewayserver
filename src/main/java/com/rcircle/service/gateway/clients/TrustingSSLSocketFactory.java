@@ -28,7 +28,7 @@ public class TrustingSSLSocketFactory extends SSLSocketFactory
     private final PrivateKey privateKey;
     private final X509Certificate[] certificateChain;
 
-    private TrustingSSLSocketFactory(String serverAlias, String keyStorePath) {
+    private TrustingSSLSocketFactory(String serverAlias, String keyStorePath, String password) {
         try {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(new KeyManager[] {this}, new TrustManager[] {this}, new SecureRandom());
@@ -43,7 +43,7 @@ public class TrustingSSLSocketFactory extends SSLSocketFactory
         } else {
             try {
                 KeyStore keyStore =
-                        loadKeyStore(TrustingSSLSocketFactory.class.getResourceAsStream(keyStorePath));
+                        loadKeyStore(TrustingSSLSocketFactory.class.getResourceAsStream(keyStorePath), password);
                 this.privateKey = (PrivateKey) keyStore.getKey(serverAlias, KEYSTORE_PASSWORD);
                 Certificate[] rawChain = keyStore.getCertificateChain(serverAlias);
                 this.certificateChain = Arrays.copyOf(rawChain, rawChain.length, X509Certificate[].class);
@@ -53,14 +53,10 @@ public class TrustingSSLSocketFactory extends SSLSocketFactory
         }
     }
 
-    public static SSLSocketFactory get(String keyStorePath) {
-        return get(keyStorePath);
-    }
-
-    public static SSLSocketFactory get(String serverAlias, String keyStorePath) {
+    public static SSLSocketFactory get(String serverAlias, String keyStorePath, String password) {
         reentrantLock.lock();
         if (!sslSocketFactories.containsKey(serverAlias)) {
-            sslSocketFactories.put(serverAlias, new TrustingSSLSocketFactory(serverAlias, keyStorePath));
+            sslSocketFactories.put(serverAlias, new TrustingSSLSocketFactory(serverAlias, keyStorePath, password));
         }
         reentrantLock.unlock();
         return sslSocketFactories.get(serverAlias);
@@ -71,10 +67,10 @@ public class TrustingSSLSocketFactory extends SSLSocketFactory
         return socket;
     }
 
-    private static KeyStore loadKeyStore(InputStream inputStream) throws IOException {
+    private static KeyStore loadKeyStore(InputStream inputStream, String password) throws IOException {
         try {
             KeyStore keyStore = KeyStore.getInstance("JKS");
-            keyStore.load(inputStream, KEYSTORE_PASSWORD);
+            keyStore.load(inputStream, password.toCharArray());
             return keyStore;
         } catch (Exception e) {
             throw new RuntimeException(e);

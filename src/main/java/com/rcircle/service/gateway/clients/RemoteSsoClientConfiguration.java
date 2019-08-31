@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RemoteSsoClientConfiguration {
-    @Value("${server.ssl.key-store}")
+    @Value("${server.ssl.key-store.path}")
     private String keyStore;
+    @Value("${server.ssl.key-store-password}")
+    private String password;
     @Bean
     public Feign.Builder feignBuilder() {
         final Client trustSSLSockets = client();
@@ -21,7 +23,7 @@ public class RemoteSsoClientConfiguration {
     @Bean
     public Client client() {
         return new Client.Default(
-                TrustingSSLSocketFactory.get(keyStore), new NoopHostnameVerifier());
+                TrustingSSLSocketFactory.get("authserver", keyStore, password), new NoopHostnameVerifier());
     }
 
     @Bean

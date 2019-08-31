@@ -109,7 +109,7 @@ public class MessageService {
         List<Message> currentList = cloneList(newsList, newsListLock);
         if (currentList.isEmpty() || currentList.size() < 2) {
             Message defaultNews = new Message();
-            defaultNews.setTitle("Welcome to Simple & Living");
+            defaultNews.setTitle("Welcome to My coding Blog");
             defaultNews.setContent("#");
             currentList.add(defaultNews);
             defaultNews = new Message();

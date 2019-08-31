@@ -64,7 +64,7 @@ public class HomeController {
         MvcToolkit.autoLoadNewsData(messageService, mm);
         List<LogFile> logs = new ArrayList<>();
         resourceService.getAllBlogs(0, 0, null, 0, 0, 5, logs);
-        mm.addAttribute("title", "- Simple & Living -");
+        mm.addAttribute("title", "-  I'm Ray -");
         mm.addAttribute("logs", logs);
         return "index";
     }

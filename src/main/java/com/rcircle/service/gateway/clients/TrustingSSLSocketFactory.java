@@ -21,7 +21,6 @@ public class TrustingSSLSocketFactory extends SSLSocketFactory
     private static final ReentrantLock reentrantLock = new ReentrantLock();
     private static final Map<String, SSLSocketFactory> sslSocketFactories =
             new LinkedHashMap<String, SSLSocketFactory>();
-    private static final char[] KEYSTORE_PASSWORD = "password".toCharArray();
     private final static String[] ENABLED_CIPHER_SUITES = {"TLS_RSA_WITH_AES_256_CBC_SHA"};
     private final SSLSocketFactory delegate;
     private final String serverAlias;
@@ -43,8 +42,8 @@ public class TrustingSSLSocketFactory extends SSLSocketFactory
         } else {
             try {
                 KeyStore keyStore =
-                        loadKeyStore(TrustingSSLSocketFactory.class.getResourceAsStream(keyStorePath), password);
-                this.privateKey = (PrivateKey) keyStore.getKey(serverAlias, KEYSTORE_PASSWORD);
+                        loadKeyStore(TrustingSSLSocketFactory.class.getResourceAsStream(keyStorePath), password.toCharArray());
+                this.privateKey = (PrivateKey) keyStore.getKey(serverAlias, password.toCharArray());
                 Certificate[] rawChain = keyStore.getCertificateChain(serverAlias);
                 this.certificateChain = Arrays.copyOf(rawChain, rawChain.length, X509Certificate[].class);
             } catch (Exception e) {
@@ -67,10 +66,10 @@ public class TrustingSSLSocketFactory extends SSLSocketFactory
         return socket;
     }
 
-    private static KeyStore loadKeyStore(InputStream inputStream, String password) throws IOException {
+    private static KeyStore loadKeyStore(InputStream inputStream, char[] password) throws IOException {
         try {
             KeyStore keyStore = KeyStore.getInstance("JKS");
-            keyStore.load(inputStream, password.toCharArray());
+            keyStore.load(inputStream, password);
             return keyStore;
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -5,6 +5,10 @@ import feign.Feign;
 import feign.RequestInterceptor;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
+import org.springframework.cloud.openfeign.ribbon.CachingSpringLoadBalancerFactory;
+import org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,16 +18,12 @@ public class RemoteSsoClientConfiguration {
     private String keyStore;
     @Value("${server.ssl.key-store-password}")
     private String password;
-    @Bean
-    public Feign.Builder feignBuilder() {
-        final Client trustSSLSockets = client();
-        return Feign.builder().client(trustSSLSockets);
-    }
 
     @Bean
-    public Client client() {
-        return new Client.Default(
-                TrustingSSLSocketFactory.get("authserver", keyStore, password), new NoopHostnameVerifier());
+    public Feign.Builder feignBuilder() {
+        Client trustSSLSockets = new Client.Default(
+                TrustingSSLSocketFactory.get("", keyStore, password), new NoopHostnameVerifier());
+        return Feign.builder().client(trustSSLSockets);
     }
 
     @Bean

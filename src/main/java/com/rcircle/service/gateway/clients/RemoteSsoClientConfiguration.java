@@ -14,17 +14,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RemoteSsoClientConfiguration {
-    @Value("${server.ssl.key-store.path}")
+    @Value("${server.ssl.key-store}")
     private String keyStore;
     @Value("${server.ssl.key-store-password}")
     private String password;
 
-    @Bean
-    public Feign.Builder feignBuilder() {
-        Client trustSSLSockets = new Client.Default(
-                TrustingSSLSocketFactory.get("", keyStore, password), new NoopHostnameVerifier());
-        return Feign.builder().client(trustSSLSockets);
-    }
+//    @Bean
+//    public Feign.Builder feignBuilder() {
+//        Client trustSSLSockets = new Client.Default(
+//                TrustingSSLSocketFactory.get("", keyStore, password), new NoopHostnameVerifier());
+//        return Feign.builder().client(trustSSLSockets);
+//    }
 
     @Bean
     public RequestInterceptor OAuth2SsoRequestInterceptor() {

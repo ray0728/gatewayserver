@@ -23,6 +23,8 @@ public class OAuth2SsoService {
     private String secret;
     @Value("${server.port}")
     private int port;
+    @Value("${eureka.instance.hostname}")
+    private String hostname;
     @Value("${trust.config.id}")
     private String trustConfigId;
     @Value("${trust.config.secret}")
@@ -87,6 +89,6 @@ public class OAuth2SsoService {
     }
 
     private String extractRedirect(String endpoint) {
-        return String.format("http://%s:%d%s", Toolkit.getLocalIP(), port, endpoint);
+        return String.format("https://%s:%d%s", hostname, port, endpoint);
     }
 }

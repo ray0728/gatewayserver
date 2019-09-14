@@ -16,7 +16,7 @@ branches:
   only:
   - master
 before_install:
-- export BUILD_NAME=$TRAVIS_BRANCH-$(date -u "+%Y%m%d%H%M%S")-$TRAVIS_BUILD_NUMBER
+- export BUILD_NAME=$TRAVIS_BRANCH-$(date -u "+%Y%m%d")-$TRAVIS_BUILD_NUMBER
 script:
 - sh travis_scripts/tag_build.sh
 - sh travis_scripts/build_services.sh

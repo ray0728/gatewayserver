@@ -185,7 +185,7 @@ uploadResFiles = function (lid) {
 
 waitHLSFinish = function (lid, filename, progress) {
     $.get("/rst/hls?lid=" + lid + "&file=" + $.base64.encode(filename), function (data, status) {
-        if (data == "1" && status == "success") {
+        if (data == "1") {
             $(progress).css('width', '100%');
             xhr_upload.splice(filename, 1);
             xhr_upload_clock.remove(filename);

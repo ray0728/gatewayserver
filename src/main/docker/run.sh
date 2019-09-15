@@ -33,7 +33,7 @@ echo "******* RESOURCE has started"
 echo "********************************************************"
 echo "Starting the Gateway Server"
 echo "********************************************************"
-java -Djava.security.egd=file:/dev/./urandom                \
+java -Xmx300m -Xms300m -Djava.security.egd=file:/dev/./urandom                \
      -Dspring.cloud.config.uri=$CONFIGSERVER_URI            \
      -Deureka.client.serviceUrl.defaultZone=$EUREKASERVER_URI \
      -Dspring.kafka.bootstrap-servers=$KAFKA_URI            \

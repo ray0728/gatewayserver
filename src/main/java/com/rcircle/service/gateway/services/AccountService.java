@@ -105,6 +105,9 @@ public class AccountService {
 
     private Account createErrorAccount(Throwable throwable){
         Account account = new Account();
+        account.setUsername("anonymous");
+        account.setUid(0);
+        account.setSignature("隠された神");
         account.setErrinfo(autoDetectErrinfo(throwable));
         return account;
     }

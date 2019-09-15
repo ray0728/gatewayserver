@@ -69,7 +69,9 @@
                     <div class="author-info">
                         <div class="line"></div>
                         <span class="author-role">Author</span>
-                        <h4><a th:href='${"/author?id=" + author.uid}' class="author-name" th:text="${author.name}"></a>
+                        <h4>
+                            <a th:if="${author.uid != 0}" th:href='${"/author?id=" + author.uid}' class="author-name" th:text="${author.name}"></a>
+                            <a th:if="${author.uid == 0}" class="author-name" th:text="${author.name}"></a>
                         </h4>
                         <p th:text="${author.autoDetectResume()}"></p>
                     </div>

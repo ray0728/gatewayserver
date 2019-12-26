@@ -70,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home", "/", "/login**", "/join**", "/news/**").permitAll()
                 .antMatchers("/rst/redirect", "/rst/ai", "/rst/account/check", "/rst/invitation/**","/rst/author/**").permitAll()
                 .antMatchers("/about", "/contact").permitAll()
+                .antMatchers("/lab/**").permitAll()
                 .antMatchers("/admin/**").hasRole(Role.ROLE_ADMIN)
                 .anyRequest().authenticated()
                 .and()

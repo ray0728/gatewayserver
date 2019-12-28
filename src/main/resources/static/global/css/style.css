@@ -2093,3 +2093,11 @@ p > span.op3 {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+#voice_map{
+    height: 100%;
+}
+
+.swiper-wrapper{
+    height: auto !important;
+}

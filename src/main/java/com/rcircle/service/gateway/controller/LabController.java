@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/lab")
 public class LabController {
 
-    @GetMapping("/map")
+    @GetMapping("/voice")
     public String getMap(ModelMap mm){
-        return "map";
+        mm.addAttribute("title", "Voice of world");
+        return "lab_voice_map";
     }
+
 }

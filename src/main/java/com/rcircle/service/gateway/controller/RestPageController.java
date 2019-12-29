@@ -3,14 +3,9 @@ package com.rcircle.service.gateway.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rcircle.service.gateway.clients.RemoteRequestWithTokenInterceptor;
-import com.rcircle.service.gateway.model.Account;
-import com.rcircle.service.gateway.model.JWTToken;
-import com.rcircle.service.gateway.model.LogFile;
-import com.rcircle.service.gateway.model.ResultData;
-import com.rcircle.service.gateway.services.AccountService;
-import com.rcircle.service.gateway.services.MessageService;
-import com.rcircle.service.gateway.services.OAuth2SsoService;
-import com.rcircle.service.gateway.services.ResourceService;
+import com.rcircle.service.gateway.model.*;
+import com.rcircle.service.gateway.services.*;
+import com.rcircle.service.gateway.utils.Base64;
 import com.rcircle.service.gateway.utils.HttpContextHolder;
 import com.rcircle.service.gateway.utils.Toolkit;
 import org.apache.tomcat.util.http.ResponseUtil;
@@ -48,6 +43,8 @@ public class RestPageController {
     private ResourceService resourceService;
     @Resource
     private AccountService accountService;
+    @Resource
+    private LocationService locationService;
 
     @GetMapping("/redirect")
     public String authcode(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
@@ -92,6 +89,21 @@ public class RestPageController {
             messageService.clearAllHLSResultFor(logid);
         }
         return "";
+    }
+
+    @GetMapping("/lab/voice/device")
+    public String uploadLocation(@RequestParam(name = "name") String name,
+                                 @RequestParam(name = "info") String info,
+                                 @RequestParam(name = "lat") String lat,
+                                 @RequestParam(name = "lon") String lon) {
+        locationService.updateLocation(name, info, lat, lon);
+        return "";
+    }
+
+    @GetMapping("/lab/voice")
+    public String getLocationBy(@RequestParam(name = "name") String name) {
+        LocationDevice device = locationService.getDeviceByName(Base64.decode(name));
+        return device == null ? "" : JSONObject.toJSONString(device.getLocation());
     }
 
     @PostMapping("/account/check")
@@ -179,11 +191,11 @@ public class RestPageController {
     }
 
     @GetMapping("/author/avatar")
-    public ResponseEntity authorAvatar(){
+    public ResponseEntity authorAvatar() {
         String errinfo;
         try {
             return createResponseEntity("/mnt/img/me.jpg");
-        }catch (IOException e){
+        } catch (IOException e) {
             errinfo = e.getMessage();
         }
         return ResponseEntity.status(404).body(errinfo);

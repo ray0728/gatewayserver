@@ -16,51 +16,24 @@
 <body>
 <div th:include="public::topbar"></div>
 <div class="container">
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title0</h4>
-                        <p class="card-text">Some example text. Some example text.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title1</h4>
-                        <p class="card-text">Some example text. Some example text.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title2</h4>
-                        <p class="card-text">Some example text. Some example text.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title3</h4>
-                        <p class="card-text">Some example text. Some example text.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+    <div id="voice_devices">
+        <div th:fragment="devices-list" class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:each="device:${devices}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${device.name}"></h4>
+                            <p class="card-text" th:text="${device.info}"></p>
+                            <a class="card-link"
+                               th:onclick="'addPOIMarker('+ ${device.name} + ',' + ${device.location} +')">Location</a>
+                            <a href="#" class="card-link">Play</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="voice_map"></div>
+    <div id="voice_map" class="mt-2"></div>
 </div>
 <div th:include="public::bottombar"></div>
 <script src="/global/js/jquery-2.2.4.min.js"></script>

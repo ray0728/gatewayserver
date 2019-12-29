@@ -25,7 +25,7 @@
                             <h4 class="card-title" th:text="${device.name}"></h4>
                             <p class="card-text" th:text="${device.info}"></p>
                             <a class="card-link"
-                               th:onclick="'addPOIMarker('+ ${device.name} + ',' + ${device.location} +')">Location</a>
+                               th:onclick="'addPOIMarker('+ ${device.name} + ',' + ${device.location} +')'">Location</a>
                             <a href="#" class="card-link">Play</a>
                         </div>
                     </div>

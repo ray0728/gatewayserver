@@ -5,7 +5,7 @@ import com.rcircle.service.gateway.utils.Base64;
 public class LocationDevice {
     private String name;
     private String info;
-    private long[] location;
+    private double[] location;
 
     public String getName() {
         return Base64.decode(name);
@@ -23,21 +23,21 @@ public class LocationDevice {
         this.info = info;
     }
 
-    public long[] getLocation() {
+    public double[] getLocation() {
         return location;
     }
 
     public void setLocation(String lat, String lon) {
         if(location == null){
-            location = new long[2];
+            location = new double[2];
         }
-        location[0] = Long.parseLong(lat);
-        location[1] = Long.parseLong(lon);
+        location[0] = Double.parseDouble(lat);
+        location[1] = Double.parseDouble(lon);
     }
 
-    private void setLocation(long lat, long lon){
+    private void updateLocation(double lat, double lon){
         if(location == null){
-            location = new long[2];
+            location = new double[2];
         }
         location[0] = lat;
         location[1] = lon;
@@ -47,7 +47,7 @@ public class LocationDevice {
         LocationDevice dev = new LocationDevice();
         dev.setName(name);
         dev.setInfo(info);
-        dev.setLocation(location[0],location[1]);
+        dev.updateLocation(location[0],location[1]);
         return dev;
     }
 }

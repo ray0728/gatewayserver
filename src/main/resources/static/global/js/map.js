@@ -81,5 +81,5 @@ autoRefreshLocation = function(name) {
 };
 
 autoRefreshDevices = function(){
-    $('#comments').load("/lab/voice/devices");
+    $('#voice_devices').load("/lab/voice/devices");
 }

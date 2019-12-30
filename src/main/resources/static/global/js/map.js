@@ -55,12 +55,12 @@ onApiLoaded = function () {
     }, 3000));
 };
 
-addPOIMarker = function (name, location) {
+addPOIMarker = function (name, lat, lon) {
     if (amarker) {
-        amarker.setPosition(location);
+        amarker.setPosition([lat,lon]);
     } else {
         amarker = new AMap.Marker({
-            position: new AMap.LngLat(location)
+            position: new AMap.LngLat([lat,lon])
         });
         amap.add(amarker);
     }

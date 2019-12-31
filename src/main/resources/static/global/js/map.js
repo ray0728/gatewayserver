@@ -55,14 +55,13 @@ onApiLoaded = function () {
     }, 3000));
 };
 
-addPOIMarker = function (name, lat, lon) {
-    if (amarker) {
-        amarker.setPosition([lat,lon]);
-    } else {
+addPOIMarker = function (name) {
+    if (!amarker) {
         amarker = new AMap.Marker({
-            position: new AMap.LngLat([lat,lon])
+            title:name
         });
-        amap.add(amarker);
+    }else{
+        amarker.setTitle(name);
     }
     xhr_upload_clock.remove("autolocation");
     xhr_upload_clock.put("autolocation", setInterval(function () {
@@ -76,6 +75,7 @@ autoRefreshLocation = function(name) {
             let location = JSON.parse(data);
             alert(location[0]);
             amarker.setPosition(location[0]);
+            amap.add(amarker);
         }
     });
 };

@@ -16,7 +16,7 @@ public class LocationDevice {
     }
 
     public String getInfo() {
-        return info;
+        return Base64.decode(info);
     }
 
     public void setInfo(String info) {

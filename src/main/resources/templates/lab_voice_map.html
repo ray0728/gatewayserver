@@ -22,10 +22,10 @@
                 <div class="swiper-slide" th:each="device:${devices}">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title" th:text="${device.name}"></h4>
+                            <h4 class="card-title" th:text="${device.getName()}"></h4>
                             <p class="card-text" th:text="${device.info}"></p>
                             <a class="card-link"
-                               th:onclick="'addPOIMarker('+ ${device.name} + ',' + ${device.location[0]} + ',' + ${device.location[1]} + ')'">Location</a>
+                               th:onclick="addPOIMarker([[${device.getName()}]]);">Location</a>
                             <a href="#" class="card-link">Play</a>
                         </div>
                     </div>
@@ -43,7 +43,6 @@
 <script src="/global/js/plugins.js"></script>
 <script src="/global/js/active.min.js"></script>
 <script src="/global/js/events.min.js"></script>
-<script src="/global/js/signup.min.js"></script>
 <script src="/global/js/map.js"></script>
 <script src="/global/js/swiper.min.js"></script>
 </body>

@@ -44,9 +44,9 @@ onApiLoaded = function () {
 addPOIMarker = function (name) {
     if (!amarker) {
         amarker = new AMap.Marker({
-            title:name
+            title: name
         });
-    }else{
+    } else {
         amarker.setTitle(name);
     }
     amap.setZoom(15);
@@ -56,7 +56,7 @@ addPOIMarker = function (name) {
     }, 1000));
 };
 
-autoRefreshLocation = function(name) {
+autoRefreshLocation = function (name) {
     $.get("/rst/lab/voice?name=" + $.base64.encode(name), function (data, status) {
         if (data != "") {
             let location = JSON.parse(data);
@@ -67,12 +67,13 @@ autoRefreshLocation = function(name) {
     });
 };
 
-autoRefreshDevices = function(){
-    $('#voice_devices').load("/lab/voice/devices", function(response,status,xhr){
-        initSwiper();});
+autoRefreshDevices = function () {
+    $('#voice_devices').load("/lab/voice/devices", function (response, status, xhr) {
+        initSwiper();
+    });
 };
 
-initSwiper = function(){
+initSwiper = function () {
     swiper = new Swiper('.swiper-container', {
         slidesPerView: 3,
         spaceBetween: 30,
@@ -88,4 +89,30 @@ initSwiper = function(){
             prevEl: '.swiper-button-prev',
         },
     });
-}
+};
+
+playVideo = function (id, url) {
+    let video = $('<video controls>')
+        .attr("id", id)
+    video.addClass('video-js');
+    video.addClass('vjs-big-play-centered');
+    video.html('<source src="' + url + '">');
+    $('.modal-div').empty();
+    $('.modal-div').append(video);
+    initVideo(id);
+};
+
+initVideo = function (videoid) {
+    let options = {
+        fluid: true,
+        controls: true,
+        preload: 'auto',
+        controlBar: {
+            volumePanel: {
+                inline: false
+            },
+            remainingTimeDisplay: false,
+        }
+    };
+    videojs(videoid, options);
+};

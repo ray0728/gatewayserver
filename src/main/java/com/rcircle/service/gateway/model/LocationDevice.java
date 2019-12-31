@@ -3,7 +3,7 @@ package com.rcircle.service.gateway.model;
 import com.rcircle.service.gateway.utils.Base64;
 
 public class LocationDevice {
-    private static final int MAX_HEARTBEAT = 3;
+    private static final int MAX_HEARTBEAT = 10;
     private String name;
     private String info;
     private int heartbeat = MAX_HEARTBEAT;
@@ -11,6 +11,10 @@ public class LocationDevice {
 
     public String getName() {
         return Base64.decode(name);
+    }
+
+    public String getLabel(){
+        return name;
     }
 
     public void setName(String name) {

@@ -26,7 +26,7 @@
                             <p class="card-text" th:text="${device.info}"></p>
                             <a href="#map" class="card-link"
                                th:onclick="addPOIMarker([[${device.getName()}]]);">Location</a>
-                            <a href="#" class="card-link">Play</a>
+                            <a href="#map" class="card-link" th:onclick="playVideo(https://[[${device.getLabel()}]]);">Play</a>
                         </div>
                     </div>
                 </div>
@@ -36,10 +36,28 @@
     <div name="map" id="voice_map" class="mt-2"></div>
 </div>
 <div th:include="public::bottombar"></div>
+<div class="modal fade" id="videomodal" tabindex="-1" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <div class="modal-body">
+                <h5 class="title">Live</h5>
+                <div class="modal-div">
+                </div>
+                <div class="newsletterForm">
+                    <button type="button" class="btn original-btn" id="btn-close">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="/global/js/jquery-2.2.4.min.js"></script>
 <script src="/global/js/jquery.base64.min.js"></script>
 <script src="/global/js/popper.min.js"></script>
 <script src="/global/bootstrap/js/bootstrap.min.js"></script>
+<script src="/global/video-js/video.min.js"></script>
+<script src="/global/video-js/videojs-contrib-hls.min.js"></script>
 <script src="/global/js/plugins.js"></script>
 <script src="/global/js/active.min.js"></script>
 <script src="/global/js/events.min.js"></script>

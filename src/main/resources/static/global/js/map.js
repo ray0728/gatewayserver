@@ -1,4 +1,4 @@
-var amap, amarker;
+var amap, amarker, swiper;
 var ClockHashMap = function () {
     let size = 0;
     let entry = new Object();
@@ -23,21 +23,7 @@ var ClockHashMap = function () {
 };
 var xhr_upload_clock = new ClockHashMap();
 $(document).ready(function () {
-    var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        slidesPerGroup: 3,
-        loop: true,
-        loopFillGroupWithBlank: true,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
+    initSwiper();
     let url = 'https://webapi.amap.com/maps?v=1.4.15&key=15af621c64962e63c36080f73f44cf8b&callback=onApiLoaded';
     let jsapi = document.createElement('script');
     jsapi.charset = 'utf-8';
@@ -63,6 +49,7 @@ addPOIMarker = function (name) {
     }else{
         amarker.setTitle(name);
     }
+    amap.setZoom(15);
     xhr_upload_clock.remove("autolocation");
     xhr_upload_clock.put("autolocation", setInterval(function () {
         autoRefreshLocation(name);
@@ -73,13 +60,32 @@ autoRefreshLocation = function(name) {
     $.get("/rst/lab/voice?name=" + $.base64.encode(name), function (data, status) {
         if (data != "") {
             let location = JSON.parse(data);
-            alert(location[0]);
-            amarker.setPosition(location[0]);
+            amarker.setPosition(location);
             amap.add(amarker);
+            amap.setCenter(location);
         }
     });
 };
 
 autoRefreshDevices = function(){
-    $('#voice_devices').load("/lab/voice/devices");
+    $('#voice_devices').load("/lab/voice/devices", function(response,status,xhr){
+        initSwiper();});
+};
+
+initSwiper = function(){
+    swiper = new Swiper('.swiper-container', {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
 }

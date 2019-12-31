@@ -24,7 +24,7 @@
                         <div class="card-body">
                             <h4 class="card-title" th:text="${device.getName()}"></h4>
                             <p class="card-text" th:text="${device.info}"></p>
-                            <a class="card-link"
+                            <a href="#map" class="card-link"
                                th:onclick="addPOIMarker([[${device.getName()}]]);">Location</a>
                             <a href="#" class="card-link">Play</a>
                         </div>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div id="voice_map" class="mt-2"></div>
+    <div name="map" id="voice_map" class="mt-2"></div>
 </div>
 <div th:include="public::bottombar"></div>
 <script src="/global/js/jquery-2.2.4.min.js"></script>

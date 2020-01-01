@@ -91,18 +91,19 @@ initSwiper = function () {
     });
 };
 
-playVideo = function (id, url) {
+playVideo = function (url) {
     let video = $('<video controls>')
-        .attr("id", id)
+        .attr("id", "videoplayer")
     video.addClass('video-js');
     video.addClass('vjs-big-play-centered');
     video.html('<source src="' + url + '">');
     $('.modal-div').empty();
     $('.modal-div').append(video);
-    initVideo(id);
+    console.log(video);
+    initVideo("videoplayer");
 };
 
-initVideo = function (videoid) {
+initVideo = function (id) {
     let options = {
         fluid: true,
         controls: true,
@@ -111,8 +112,10 @@ initVideo = function (videoid) {
             volumePanel: {
                 inline: false
             },
-            remainingTimeDisplay: false,
+            remainingTimeDisplay: false
         }
     };
-    videojs(videoid, options);
+    videojs(id, options);
+    console.log("done");
+    $("#videomodal").modal('show');
 };

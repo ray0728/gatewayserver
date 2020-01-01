@@ -22,11 +22,14 @@
                 <div class="swiper-slide" th:each="device:${devices}">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title" th:text="${device.getName()}"></h4>
+                            <h4 class="card-title" th:text="${device.name}"></h4>
                             <p class="card-text" th:text="${device.info}"></p>
-                            <a href="#map" class="card-link"
-                               th:onclick="addPOIMarker([[${device.getName()}]]);">Location</a>
-                            <a href="#map" class="card-link" th:onclick="playVideo(https://[[${device.getLabel()}]]);">Play</a>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-primary" th:onclick="${device.name}">Location</button>
+                                <button type="button" class="btn btn-info">Play</button>
+                            </div>
+                            <!--                               th:onclick="'addPOIMarker(\''+${device.name}+'\')'">Location</a>-->
+                            <!--                            <a href="#map" class="card-link" th:onclick="'playVideo(\'/api/stream/live/' + ${device.getLabel()}+'.m3u8\')'">Play</a>-->
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="/global/css/log.css">
     <link rel="stylesheet" href="/global/video-js/video-js.min.css">
     <link rel="stylesheet" href="/global/css/swiper.min.css">
-
 </head>
 <body>
 <div th:include="public::topbar"></div>
@@ -29,7 +28,7 @@
                                 <button type="button" class="btn btn-primary" th:data-id="${device.name}"
                                         onclick="addPOIMarker(this.getAttribute('data-id'))">Location
                                 </button>
-                                <button type="button" class="btn btn-info" th:data-url="'/api/stream/live' + ${device.getLabel()} + '.m3u8'"
+                                <button type="button" class="btn btn-info" th:data-url="'/api/resource/lab/live/' + ${device.getLabel()} + '.m3u8'"
                                         onclick="playVideo(this.getAttribute('data-url'))">Play</button>
                             </div>
                         </div>
@@ -48,8 +47,7 @@
                     aria-hidden="true">&times;</span></button>
             <div class="modal-body">
                 <h5 class="title">Live</h5>
-                <div class="modal-div">
-                </div>
+                <div class="modal-div"></div>
                 <div class="newsletterForm">
                     <button type="button" class="btn original-btn" id="btn-close">Close</button>
                 </div>

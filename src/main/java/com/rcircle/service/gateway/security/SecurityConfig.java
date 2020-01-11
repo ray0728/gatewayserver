@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/rst/redirect", "/rst/ai", "/rst/account/check", "/rst/invitation/**","/rst/author/**").permitAll()
                 .antMatchers("/rst/lab/**").permitAll()
                 .antMatchers("/about", "/contact").permitAll()
-                .antMatchers("/lab/**").permitAll()
+                .antMatchers("/live/**").permitAll()
                 .antMatchers("/admin/**").hasRole(Role.ROLE_ADMIN)
                 .anyRequest().authenticated()
                 .and()

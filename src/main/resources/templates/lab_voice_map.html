@@ -28,7 +28,7 @@
                                 <button type="button" class="btn btn-primary" th:data-id="${device.name}"
                                         onclick="addPOIMarker(this.getAttribute('data-id'))">Location
                                 </button>
-                                <button type="button" class="btn btn-info" th:data-url="'/api/resource/lab/live/' + ${device.getLabel()} + '.m3u8'"
+                                <button type="button" class="btn btn-info" th:data-url="'/api/res/live/' + ${device.getLabel()} + '.m3u8'"
                                         onclick="playVideo(this.getAttribute('data-url'))">Play</button>
                             </div>
                         </div>

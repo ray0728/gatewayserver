@@ -28,8 +28,10 @@
                                 <button type="button" class="btn btn-primary" th:data-id="${device.name}"
                                         onclick="addPOIMarker(this.getAttribute('data-id'))">Location
                                 </button>
-                                <button type="button" class="btn btn-info" th:data-url="'/api/res/live/' + ${device.getLabel()} + '.m3u8'"
-                                        onclick="playVideo(this.getAttribute('data-url'))">Play</button>
+                                <button type="button" class="btn btn-info"
+                                        th:data-url="'/api/res/live/' + ${device.getLabel()} + '.m3u8'"
+                                        onclick="playVideo(this.getAttribute('data-url'))">Play
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -38,18 +40,36 @@
         </div>
     </div>
     <div name="map" id="voice_map" class="mt-2"></div>
+    <div class="jumbotron">
+        <h1>External interface definition</h1>
+        <h2>1. Device Location</h2>
+        <p>Regularly report location information and additional information through GET method.</p>
+        <h4>URI: /rst/lab/voice/device</h4>
+        <h4>parameter:</h4>
+        <p><b>name</b>: Device name (requires Base64 coding)</p>
+        <p><b>info</b>: Additional information (requires Base64 coding)</p>
+        <p><b>long</b>: Longitude of the device position</p>
+        <p><b>lat</b>: Latitude of the device location</p>
+        <h5>example:</h5>
+        <p>/rst/lab/voice/device?name=dGFueGu&info=dGFueGu&lat=116.391467&lon=39.927761</p>
+        <h2>2.Video streaming</h2>
+        <p>Push the stream through RTMP and push the stream address rtmp: //www.iamray.cn/stream/name.</p>
+        <p>Where <b>name</b> is the same value in location interface(requires Base64 coding)</p>
+    </div>
 </div>
 <div th:include="public::bottombar"></div>
-<div class="modal fade" id="videomodal" tabindex="-1" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
-            <div class="modal-body">
-                <h5 class="title">Live</h5>
-                <div class="modal-div"></div>
-                <div class="newsletterForm">
-                    <button type="button" class="btn original-btn" id="btn-close">Close</button>
+<div class="subscribe-newsletter-area">
+    <div class="modal fade" id="videomodal" tabindex="-1" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <div class="modal-body">
+                    <h5 class="title">Live</h5>
+                    <div class="modal-div"></div>
+                    <div class="newsletterForm">
+                        <button type="button" class="btn original-btn" id="btn-close">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,7 +84,7 @@
 <script src="/global/js/plugins.js"></script>
 <script src="/global/js/active.min.js"></script>
 <script src="/global/js/events.min.js"></script>
-<script src="/global/js/map.js"></script>
+<script src="/global/js/map.min.js"></script>
 <script src="/global/js/swiper.min.js"></script>
 </body>
 </html>

@@ -58,11 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .csrf().csrfTokenRepository(new HttpSessionCsrfTokenRepository())
-//                .requireCsrfProtectionMatcher(httpServletRequest -> {
-//                   return true;
-//                })
-//                .and()
                 .authorizeRequests()
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/res/blog/**", "/api/res/reply/**").permitAll()
@@ -71,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/rst/redirect", "/rst/ai", "/rst/account/check", "/rst/invitation/**","/rst/author/**").permitAll()
                 .antMatchers("/rst/lab/**").permitAll()
                 .antMatchers("/about", "/contact").permitAll()
-                .antMatchers("/live/**").permitAll()
+                .antMatchers("/lab/**","/live/**").permitAll()
                 .antMatchers("/admin/**").hasRole(Role.ROLE_ADMIN)
                 .anyRequest().authenticated()
                 .and()

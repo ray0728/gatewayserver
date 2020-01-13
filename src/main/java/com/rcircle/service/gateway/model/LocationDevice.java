@@ -70,4 +70,8 @@ public class LocationDevice {
             heartbeat--;
         }
     }
+    
+    public boolean isSame(String dst){
+        return name.equals(dst);
+    }
 }

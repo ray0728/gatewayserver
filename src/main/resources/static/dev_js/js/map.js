@@ -1,4 +1,4 @@
-var amap, amarker, swiper;
+var amap, amarker, swiper, videoid;
 var ClockHashMap = function () {
     let size = 0;
     let entry = new Object();
@@ -29,6 +29,7 @@ $(document).ready(function () {
     jsapi.charset = 'utf-8';
     jsapi.src = url;
     document.head.appendChild(jsapi);
+    $.base64.utf8encode = true;
 });
 onApiLoaded = function () {
     amap = new AMap.Map('voice_map', {
@@ -91,16 +92,23 @@ initSwiper = function () {
     });
 };
 
+$('#videomodal').on('show.bs.modal', function(e){
+    initVideo(videoid);
+});
+
+$('#videomodal').on('hidden.bs.modal', function(e){
+    $('.modal-div').empty();
+});
+
 playVideo = function (url) {
+    videoid = $.base64.encode(url);
     let video = $('<video controls>')
-        .attr("id", "videoplayer")
+        .attr("id", videoid);
     video.addClass('video-js');
     video.addClass('vjs-big-play-centered');
     video.html('<source src="' + url + '">');
-    $('.modal-div').empty();
     $('.modal-div').append(video);
-    console.log(video);
-    initVideo("videoplayer");
+    $("#videomodal").modal('show');
 };
 
 initVideo = function (id) {
@@ -116,6 +124,5 @@ initVideo = function (id) {
         }
     };
     videojs(id, options);
-    console.log("done");
-    $("#videomodal").modal('show');
+
 };

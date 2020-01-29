@@ -16,7 +16,8 @@
                         <div class="breaking-news-area" th:fragment="news">
                             <div id="breakingNewsTicker" class="ticker" style="height: 24px;">
                                 <ul>
-                                    <li th:each="news:${newslist}"><a th:href="${news.content}" th:text="${news.title}"></a></li>
+                                    <li th:each="news:${newslist}"><a th:href="${news.content}"
+                                                                      th:text="${news.title}"></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -123,7 +124,8 @@
 <div th:fragment="bottombar">
     <footer class="footer-area text-center">
         Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-        All rights reserved | <a href="http://www.beian.miit.gov.cn/">蜀ICP备19028948号</a> | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
+        All rights reserved | <a href="http://www.beian.miit.gov.cn/">蜀ICP备19028948号</a> | This template is made with <i
+            class="fa fa-heart-o" aria-hidden="true"></i> by <a
             href="https://colorlib.com" target="_blank">Colorlib</a>
     </footer>
 </div>
@@ -131,9 +133,39 @@
     <div class="post-sidebar-area">
         <!-- Widget Area -->
         <div class="sidebar-widget-area">
-            <h5 class="title">Donate</h5>
-            <img src="/global/img/donate/wechat.png" alt="">
-            <img src="/global/img/donate/zhifubao.jpg" alt="">
+            <button type="button" class="btn original-btn" data-toggle="collapse" data-target="#thanks">Donate</button>
+            <div id="thanks" class="collapse">
+                本站点主要是个人站点，站点内容与代码均可免费使用，正是有您的支持和鼓励，让我能坚持下去。如果您觉得这些资源对您带来了帮助，欢迎给网站捐赠。捐赠费用将用于网站的日常运营。
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="collapsed card-link" data-toggle="collapse" href="#alipay">
+                                <strong>支付宝</strong> (<abbr
+                                    title="Alipay is an eWallet payment method, a secure place where your shoppers can store funds to be used online.">ALIPAY</abbr>)
+                            </a>
+                        </div>
+                        <div id="alipay" class="collapse" data-parent="#accordion">
+                            <div class="card-body">
+                                <img src="/global/img/donate/zhifubao.jpg" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="collapsed card-link" data-toggle="collapse" href="#wechat">
+                                <strong>微信支付</strong> (<abbr
+                                    title="WeChat Pay empowers merchants to connect with consumers before, during, and after sales through innovative marketing platforms in the WeChat ecosystem.">WECHAT
+                                PAY</abbr>)
+                            </a>
+                        </div>
+                        <div id="wechat" class="collapse" data-parent="#accordion">
+                            <div class="card-body">
+                                <img src="/global/img/donate/wechat.png" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Widget Area -->

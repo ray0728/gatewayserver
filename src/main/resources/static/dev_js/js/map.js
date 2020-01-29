@@ -92,16 +92,16 @@ initSwiper = function () {
     });
 };
 
-$('#videomodal').on('show.bs.modal', function(e){
+$('#videomodal').on('show.bs.modal', function (e) {
     initVideo(videoid);
 });
 
-$('#videomodal').on('hidden.bs.modal', function(e){
+$('#videomodal').on('hidden.bs.modal', function (e) {
     $('.modal-div').empty();
 });
 
 playVideo = function (url) {
-    videoid = $.base64.encode(url);
+    videoid = generateVideoId(url.length);
     let video = $('<video controls>')
         .attr("id", videoid);
     video.addClass('video-js');
@@ -109,6 +109,10 @@ playVideo = function (url) {
     video.html('<source src="' + url + '">');
     $('.modal-div').append(video);
     $("#videomodal").modal('show');
+};
+
+generateVideoId = function (length) {
+    return Number(Math.random().toString().substr(3, length) + Date.now()).toString(36);
 };
 
 initVideo = function (id) {

@@ -112,7 +112,7 @@ playVideo = function (url) {
 };
 
 generateVideoId = function (length) {
-    return Number(Math.random().toString().substr(3, length) + Date.now()).toString(36);
+    return 'v' + Number(Math.random().toString().substr(3, length) + Date.now()).toString(36);
 };
 
 initVideo = function (id) {

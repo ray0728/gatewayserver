@@ -72,6 +72,6 @@ public class LocationDevice {
     }
     
     public boolean isSame(String dst){
-        return name.equals(dst);
+        return info.equals(dst);
     }
 }

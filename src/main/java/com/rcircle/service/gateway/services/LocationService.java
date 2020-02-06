@@ -44,7 +44,7 @@ public class LocationService {
             }, 1, 5, TimeUnit.SECONDS);
         }
         for (LocationDevice dev : mDevices) {
-            if (dev.isSame(name)) {
+            if (dev.isSame(info)) {
                 device = dev;
                 device.restoreHeartBeat();
                 break;

@@ -91,7 +91,7 @@ public class RestPageController {
         return "";
     }
 
-    @GetMapping("/lab/voice/device")
+    @PutMapping("/lab/voice/device")
     public String uploadLocation(@RequestParam(name = "name") String name,
                                  @RequestParam(name = "info") String info,
                                  @RequestParam(name = "lat") String lat,

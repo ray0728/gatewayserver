@@ -1,5 +1,6 @@
 package com.rcircle.service.gateway.utils;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 

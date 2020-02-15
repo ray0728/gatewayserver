@@ -1,5 +1,6 @@
 package com.rcircle.service.gateway.security;
 
+import com.rcircle.service.gateway.utils.CsrfSecurityRequestMatcher
 import com.rcircle.service.gateway.filters.OAuth2SsoAuthenticationProcessingFilter;
 import com.rcircle.service.gateway.model.Role;
 import com.rcircle.service.gateway.security.authentication.OAuthAuthenticationFailureHandler;
@@ -70,6 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/lab/**","/live/**").permitAll()
                 .antMatchers("/admin/**").hasRole(Role.ROLE_ADMIN)
                 .anyRequest().authenticated()
+                .and()
+                .csrf().requireCsrfProtectionMatcher(new CsrfSecurityRequestMatcher())
                 .and()
                 .httpBasic().disable()
                 .formLogin().loginPage("/login").permitAll()

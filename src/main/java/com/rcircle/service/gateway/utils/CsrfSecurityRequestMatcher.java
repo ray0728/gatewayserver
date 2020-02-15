@@ -1,4 +1,4 @@
-package com.rcircle.service.gateway.security;
+package com.rcircle.service.gateway.utils;
 
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;

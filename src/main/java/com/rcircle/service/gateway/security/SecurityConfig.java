@@ -1,6 +1,6 @@
 package com.rcircle.service.gateway.security;
 
-import com.rcircle.service.gateway.utils.CsrfSecurityRequestMatcher
+import com.rcircle.service.gateway.utils.CsrfSecurityRequestMatcher;
 import com.rcircle.service.gateway.filters.OAuth2SsoAuthenticationProcessingFilter;
 import com.rcircle.service.gateway.model.Role;
 import com.rcircle.service.gateway.security.authentication.OAuthAuthenticationFailureHandler;
